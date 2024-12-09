@@ -1,0 +1,110 @@
+:root {
+    --corFundo: black;
+    --corLetra: white;
+    --corFundoMenu: black;
+    --corLetraMenu: white;
+}
+
+body {
+    background-color: var(--corFundo);
+    color: var(--corLetra)
+}
+
+.menu {
+    background: var(--corFundoMenu);
+    color: var(--corLetraMenu);
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+}
+
+.menu svg {
+    fill: var(--corLetraMenu);
+}
+
+.menu #itens-menu {
+    flex: 1;
+}
+
+#config {
+    float: right;
+    margin-right: 20px;
+}
+
+#config svg {
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.menu #conta{
+    max-width: 400px;
+}
+
+.menu #conta span {
+    margin-right: 10px;
+}
+
+.menu #conta button {
+    padding: 2px 5px;
+    margin: 2px;
+}
+
+.boxCopyScript {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 2px 0;
+}
+
+.boxCopyScript .copy {
+    font-weight: 700;
+    font-size: 18px;
+    height: 35px;
+    padding: 2px;
+    min-width: 80px;
+    border-radius: 10px 0;
+    background-color: var(--corFundo);
+    color: var(--corLetra);
+    border: 1px solid var(--corLetra);
+}
+
+.boxCopyScript .copy:hover{
+    cursor: pointer;
+}
+
+.boxCopyScript .copy:active {
+    background-color: green;
+}
+
+.boxCopyScript .script {
+    font-size: 18px;
+    min-height: 40px;
+    padding: 2px;
+    width: 380px;
+    background-color: var(--corFundo);
+    color: var(--corLetra);
+    border: 1px solid var(--corLetra);
+    transition: background-color 0.5s ease;
+    pointer-events: auto; /*none: Nenhuma interação com o ponteiro. auto: Comportamento padrão. */
+    resize: both; /* both: Rredimensionamento horizontal e vertical. vertical: so na vertical. horizontal: só na horizontal */
+}
+
+.boxCopyScript .opcoes svg{
+    fill: var(--corLetra);
+}
+
+.boxCopyScript .opcoes svg:hover{
+    cursor: pointer;
+}
+
+.boxCopyScript .opcoes svg:hover ~ .boxCopyScript{
+    background-color: red; 
+}
+
+.esconder {
+    display: none;
+}
+
+.lado-a-lado {
+    display: inline-block;
+}

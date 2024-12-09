@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Bloco</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/loginCadastro.css">
+</head>
+<body>
+    <div class="box">
+        <% if(mensagem) {
+            mensagem.forEach(el => { %>
+                <p class="msgError"><%=el%></p>
+            <%})%>    
+        <%} %>
+        <form action="/cadastro" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label for="nome">Nome:</label>
+                    </td>
+                    <td>
+                        <input type="text" name="nome" id="nome" required placeholder="Digite seu nome" maxlength="40">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="email">Email:</label>
+                    </td>
+                    <td>
+                        <input type="email" name="email" id="email" required placeholder="Digite seu email">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="senha">Senha:</label>
+                    </td>
+                    <td>
+                        <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <button class="btnForaForm" id="voltar" onclick="window.location.href='/'">Voltar</button>
+    </div>
+</body>
+</html>

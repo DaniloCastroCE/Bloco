@@ -1,0 +1,59 @@
+.boxButtons {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.buttonsAbas {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttonsAbas:hover {
+    background-color: #8be7c2;
+}
+
+.conteudoAbas {
+    display: none;
+}
+
+.buttonAbaAtiva {
+    background-color: #a7f0d3;
+    border-bottom: 4px solid #ffc72c;
+    font-weight: 700;
+}
+
+.showAba {
+    display: block;
+}
+
+.tdTitulo {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    width: 100%;
+}
+
+.conteudoAbas table {
+    margin: 2px auto;    
+}
+
+.conteudoAbas table tr td {
+    padding: 4px;
+}
+
+.conteudoAbas table tr td input[type="color"] {
+    width: 25px;
+    height: 25px;
+}
+
+.conteudoAbas table tr td input[type="color"]:hover {
+    cursor: pointer;
+}
