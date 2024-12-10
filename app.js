@@ -6,6 +6,7 @@ const router = require('./router/router')
 const conectarDB = require('./config/db')
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const PORT = process.env.PORT || 3000
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, './src/views'))
@@ -24,8 +25,8 @@ app.use(
 app.use("/", router)
 
 conectarDB(process.env.URI).then( () => {
-    app.listen(process.env.PORT, '0.0.0.0', () => {
-        console.log('Servidor ONLINE na porta: ', process.env.PORT)
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log('Servidor ONLINE na porta: ', PORT)
     });
 } ).catch( (err) => {
     console.error('Banco não conectou')
