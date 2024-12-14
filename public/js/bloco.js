@@ -58,7 +58,7 @@ const init = (idBox, scripts) => {
 
     try {
         let numId = 0
-        if(usuario.config.grupos.length > 0 ||usuario.config.grupos.length !== undefined){
+        if(usuario.config.grupos.length > 0 || usuario.config.grupos.length !== undefined){
             usuario.config.grupos.forEach((el, index) => {
                 box.innerHTML += `
                 <fieldset class="grupo" id="grupo${el.replace(/\s+/g, '')}" style="display:none;">
@@ -70,7 +70,7 @@ const init = (idBox, scripts) => {
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
-                if(!nomeGrupo) {
+                if(!nomeGrupo || el.grupo === '') {
                     numId = addKeyScriptMult([el],box, numId)
                 }else {
                     const fildGrup = document.querySelector(`#grupo${nomeGrupo.replace(/\s+/g, '')}`)
