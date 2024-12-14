@@ -63,7 +63,7 @@ body {
 .boxCopyScript .copy {
     font-weight: 700;
     height: 35px;
-    padding: 4px 2px;
+    padding: 2px 4px;
     min-width: 80px;
     border-radius: 10px 0;
     background-color: var(--corFundo);
