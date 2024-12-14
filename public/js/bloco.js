@@ -70,7 +70,7 @@ const init = (idBox, scripts) => {
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
-                if(el.grupo === '' || !nomeGrupo) {
+                if(!nomeGrupo) {
                     numId = addKeyScriptMult([el],box, numId)
                 }else {
                     const fildGrup = document.querySelector(`#grupo${nomeGrupo.replace(/\s+/g, '')}`)
