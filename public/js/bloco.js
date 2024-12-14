@@ -36,10 +36,11 @@ const getUser = async () => {
             usuario = data
             if (usuario.config.scripts === undefined) {
                 usuario.config.scripts = []
-                console.log("'usuario.config.scripts' === undefined")
+                //console.log("'usuario.config.scripts' === undefined")
             }
             init("boxBloco", usuario.config.scripts)
             controleCores()
+            controleGrupos()
 
 
         }).finally(() => {
@@ -51,43 +52,39 @@ const getUser = async () => {
 }
 getUser()
 
-const init = (idBox, scritps) => {
+const init = (idBox, scripts) => {
     const box = document.querySelector(`#${idBox}`)
     box.innerHTML = ""
 
     try {
-        scritps.forEach((el, index) => {
-            const key = (el.key.length > 0) ? `[${el.key.trim()}]` : ""
+        let numId = 0
+        if(usuario.config.grupos.length > 0 ||usuario.config.grupos.length !== undefined){
+            usuario.config.grupos.forEach((el, index) => {
+                box.innerHTML += `
+                <fieldset class="grupo" id="grupo${el.replace(/\s+/g, '')}" style="display:none;">
+                    <legend>${el.toUpperCase()}</legend>
+                    <div id="boxGrupo${el.replace(/\s+/g, '')}"></div>
+                </fieldset>
+               `
+            })
 
-            const script = (key !== "") ? `${key} ${el.script}` : el.script
+            usuario.config.scripts.forEach(el => {
+                const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
+                if(el.grupo === '' || !nomeGrupo) {
+                    numId = addKeyScriptMult([el],box, numId)
+                }else {
+                    const fildGrup = document.querySelector(`#grupo${nomeGrupo.replace(/\s+/g, '')}`)
+                    const divBox = document.querySelector(`#boxGrupo${nomeGrupo.replace(/\s+/g, '')}`)
+                    console.log("teste: ",divBox, nomeGrupo)
+                    numId = addKeyScriptMult([el],divBox, numId);
+                    fildGrup.style = 'display: block;'
+                }
+            })
 
-            const cod = `
-                <div class="boxCopyScript" id="boxCopyScript${index}">
-                    <button 
-                        class="copy" 
-                        id="copy${index}"
-                        onclick="clickCopy(${index})"
-                        >COPIAR</button>
-                    <textarea 
-                        class="script" 
-                        id="script${index}"
-                        onchange="onChangeScript(${index})"
-                        placeholder="Digite o seu texto padrão (script)"
-                        >${script}</textarea>
-                    <div class="opcoes">
-                        <svg onclick="clickOpcoes(${index})"
-                        xmlns="http://www.w3.org/2000/svg" 
-                        height="24px" 
-                        viewBox="0 -960 960 960" 
-                        width="24px" 
-                        fill="#e8eaed">
-                            <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
-                        </svg>
-                    </div>
-                </div>
-            `
-            box.innerHTML += cod
-        });
+            
+        }else {
+            numId = addKeyScriptMult(usuario.config.scripts,box, numId)
+        }
 
         if (usuario.config.hidden === "btn") {
             toggleHidden("init")
@@ -96,6 +93,43 @@ const init = (idBox, scritps) => {
     } catch (err) {
         console.error('Erro no init\nError:', err)
     }
+}
+
+const addKeyScriptMult = (array, divBox, numId) => {
+    array.forEach((el, index) => {
+        const key = (el.key.length > 0) ? `[${el.key.trim()}]` : ""
+        let cod = ''
+        const script = (key !== "") ? `${key} ${el.script}` : el.script
+        cod += `
+            <div class="boxCopyScript" id="boxCopyScript${numId}">
+                <button 
+                    class="copy" 
+                    id="copy${numId}"
+                    onclick="clickCopy(${numId})"
+                    >COPIAR</button>
+                <textarea 
+                    class="script" 
+                    id="script${numId}"
+                    onchange="onChangeScript(${numId})"
+                    placeholder="Digite o seu texto padrão (script)"
+                    >${script}</textarea>
+                <div class="opcoes">
+                    <svg onclick="clickOpcoes(${numId})"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    height="24px" 
+                    viewBox="0 -960 960 960" 
+                    width="24px" 
+                    fill="#e8eaed">
+                        <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+                    </svg>
+                </div>
+            </div>
+        `
+        divBox.innerHTML += cod
+        numId++
+        
+    });
+    return numId
 }
 
 const onChangeScript = (numId) => {
@@ -113,22 +147,26 @@ const clickCopy = (numId) => {
     try {
         navigator.clipboard.writeText(usuario.config.scripts[numId].script)
             .then(() => {
-                console.log(`Copiado: ${usuario.config.scripts[numId].script}`)
-                console.log(usuario)
+                //console.log(`Copiado: ${usuario.config.scripts[numId].script}`)
+                //console.log(usuario)
                 //textarea.select()
                 const corFundo = textarea.style.backgroundColor
                 const corLetra = textarea.style.color
-                textarea.style.backgroundColor = 'lightblue'
-                textarea.style.color = 'black'
 
-                setTimeout(() => {
-                    textarea.style.backgroundColor = corFundo
-                    textarea.style.color = corLetra
-                }, 500)
+                const estilo = window.getComputedStyle(textarea)
+                if(textarea.display !== 'none' && 1 > 2){
+                    textarea.style.backgroundColor = 'lightblue'
+                    textarea.style.color = 'black'
+                    
+                    setTimeout(() => {
+                        textarea.style.backgroundColor = corFundo
+                        textarea.style.color = corLetra
+                    }, 500)
+                }
 
             }).catch((err) => {
                 alert('Erro ao copiar script')
-                console.log('Erro ao copiar script\nErro: ', err)
+                //console.log('Erro ao copiar script\nErro: ', err)
             })
     } catch (error) {
         console.error("Erro no navigator\nErro: ", error)
@@ -203,8 +241,26 @@ const clickOpcoes = (numId) => {
     titulo.textContent = `Script ${numId + 1}`
     conteudo.innerHTML = cod
 
+    try {
+        const select = document.querySelector('#selectGrupo')
+
+        select.innerHTML += `<option id="semGrupo" value="sem grupo">Sem Grupo</option>`
+
+        usuario.config.grupos.forEach(el => {
+            if(usuario.config.scripts[numId].grupo === el){
+                select.innerHTML += `<option selected value="${el}">${el.toUpperCase()}</option>`
+            }else {
+                select.innerHTML += `<option value="${el}">${el.toUpperCase()}</option>`
+            }
+        })
+
+    } catch (error) {
+        console.error(error)
+    }
+
     const inputKey = document.querySelector('#conteudoKey')
     const inputScript = document.querySelector('#conteudoScript')
+    const selectGrupo = document.querySelector('#selectGrupo')
 
     inputKey.value = script.key
     inputScript.value = script.script
@@ -231,6 +287,15 @@ const clickOpcoes = (numId) => {
         }
         onChangeScript(numId)
     })
+    selectGrupo.addEventListener('change', (event) => {
+        if(event.target.value !== 'sem grupo'){
+            usuario.config.scripts[numId].grupo = event.target.value
+        }else {
+            usuario.config.scripts[numId].grupo = ""
+        }
+        init("boxBloco", usuario.config.scripts)
+        atualizarConfig()
+    })
 }
 
 const addInputTextareaConteudo = () => {
@@ -252,11 +317,21 @@ const addInputTextareaConteudo = () => {
                     <textarea name="script" id="conteudoScript" placeholder="Digite seu script"></textarea>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <label for="conteudoGrupos">Grupo:</label>
+                </td>
+                <td>
+                    <select id="selectGrupo">
+                    </select>
+                </td>
+            </tr>
         </table>
 
         <button type="button" class="conteudoButton" id="conteudoButton" onclick="fecharModal()">OK</button>
     `
 }
+
 
 const config = () => {
     abrirModal()
@@ -303,7 +378,7 @@ const attScripts = async (op, id) => {
             })
         }
     )
-    console.log({ msg: "(attScripts) - Variavel script atualizada", obj: usuario })
+    //console.log({ msg: "(attScripts) - Variavel script atualizada", obj: usuario })
 
 }
 
@@ -319,12 +394,12 @@ const atualizarConfig = async () => {
                 valor: usuario.config
             })
         })
-        console.log({ msg: "(atualizarConfig) - Variavel config atualizada", obj: usuario })
+        //console.log({ msg: "(atualizarConfig) - Variavel config atualizada", obj: usuario })
 }
 
 const toggleHidden = (op) => {
     const boxCopyScript = document.getElementsByClassName('boxCopyScript')
-    const copy = document.getElementsByClassName('copy')
+    //const copy = document.getElementsByClassName('copy')
     const script = document.getElementsByClassName('script')
     const opcoes = document.getElementsByClassName('opcoes')
 
@@ -332,11 +407,14 @@ const toggleHidden = (op) => {
         script[i].classList.toggle('esconder')
         opcoes[i].classList.toggle('esconder')
         boxCopyScript[i].classList.toggle('lado-a-lado')
-
-        mudarTextCopy(script[i].classList.contains('esconder'), copy[i], i)
-
     }
 
+    Array.from(script).forEach(el => {
+        const index = Number(el.id.slice(6))
+        const btn = document.querySelector(`#copy${index}`) 
+        mudarTextCopy(el.classList.contains('esconder'), btn, index)
+    })
+    
     if (op !== "init" || !op) {
         if (!usuario.config.hidden) {
             usuario.config.hidden = "btn"
@@ -368,8 +446,7 @@ const svgVisivel = (op) => {
 const mudarTextCopy = (modificar, btn, i) => {
     if (modificar) {
         const key = usuario.config.scripts[i].key
-        const num = i + 1
-        btn.textContent = (key !== "") ? key : `COPIAR ${num.toString().padStart(2, "0")}`
+        btn.textContent = (key !== "") ? key : `COPIAR ${(i+1).toString().padStart(2, "0")}`
     } else {
         btn.textContent = "COPIAR"
     }
@@ -382,8 +459,8 @@ const abas = (idBox) => {
     box.innerHTML = `
         <div class="boxAbas">
             <div class="boxButtons">
-                <div class="buttonsAbas buttonAbaAtiva" onclick="clickAbas(event, 'aba1')">COR</div>
-                <div class="buttonsAbas" onclick="clickAbas(event, 'aba2')">Aba 2</div>
+                <div class="buttonsAbas buttonAbaAtiva" onclick="clickAbas(event, 'aba1')">CORES</div>
+                <div class="buttonsAbas" onclick="clickAbas(event, 'aba2')">GRUPOS</div>
                 <div class="buttonsAbas" onclick="clickAbas(event, 'aba3')">Aba 3</div>
             </div>
             <div class="conteudoAbas showAba" id="aba1">
@@ -429,13 +506,44 @@ const abas = (idBox) => {
                 </table>
             </div>
             <div class="conteudoAbas" id="aba2">
-                teste 2
+                <h3 class="tdTitulo">Criar Grupo</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="text" id="inpCreatGrups" placeholder="Digite o nome do grupo">
+                        </td>
+                        <td>
+                            <button id="btnCreatGrups" onclick="onClickGrups()">criar</button>
+                        </td>
+                    </tr>
+                </table>
+                <h3 class="tdTitulo">Lista de Grupos</h3>
+                <table id="tableListGrups"></table>
             </div>
             <div class="conteudoAbas" id="aba3">
-                teste 3
+                <h3 class="tdTitulo">Aba 3</h3>
             </div>
         </div>
     `
+    attNomeListGrup()
+}
+
+const attNomeListGrup = () => {
+    const tableListGrups = document.querySelector('#tableListGrups')
+    tableListGrups.innerHTML = ''
+    for (let i = 0; i < usuario.config.grupos.length; i++) {
+        console.log(usuario.config.grupos[i])
+        tableListGrups.innerHTML += `
+            <tr>
+                <td>
+                    <b>Nome:</b>
+                </td>
+                <td>
+                    ${usuario.config.grupos[i]}
+                </td>
+            </tr>
+        `
+    }
 }
 
 const clickAbas = (event, aba) => {
@@ -477,8 +585,6 @@ const changeCores = (event) => {
 
 const controleCores = () => {
     if (!usuario.config.cores) {
-
-
         let cores = {
             body: {
                 fundo: '#000000',
@@ -500,5 +606,28 @@ const controleCores = () => {
     document.documentElement.style.setProperty('--corFundoMenu', usuario.config.cores.menu.fundo)
     document.documentElement.style.setProperty('--corLetraMenu', usuario.config.cores.menu.letra)
 
+    atualizarConfig()
+}
+
+const onClickGrups = () => {
+    const input = document.querySelector('#inpCreatGrups')
+    if(input.value.trim() !== "" && !usuario.config.grupos.includes(input.value.trim().toLowerCase())){
+        const valor = input.value.trim().toLowerCase()
+        usuario.config.grupos.push(valor)
+        input.value = ""
+        atualizarConfig()
+        attNomeListGrup()
+    }else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())){
+        alert('grupo já cadastrado')
+        input.value = ""
+    }else {
+        input.value = ""
+    }
+}
+
+const controleGrupos = () => {
+    if(!usuario.config.grupos){
+        Object.assign(usuario.config, { grupos: [] })
+    }
     atualizarConfig()
 }

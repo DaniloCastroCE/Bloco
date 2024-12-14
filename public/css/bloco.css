@@ -47,7 +47,11 @@ body {
 .menu #conta button {
     padding: 2px 5px;
     margin: 2px;
+    background-color: var(--corLetraMenu);
+    color: var(--corFundoMenu);
+    cursor: pointer;
 }
+
 
 .boxCopyScript {
     display: flex;
@@ -87,6 +91,28 @@ body {
     transition: background-color 0.5s ease;
     pointer-events: auto; /*none: Nenhuma interação com o ponteiro. auto: Comportamento padrão. */
     resize: both; /* both: Rredimensionamento horizontal e vertical. vertical: so na vertical. horizontal: só na horizontal */
+}
+
+.grupo{
+    width: fit-content;
+    padding: 10px 15px 30px;
+    margin-bottom: 25px;
+    /*border: 1px solid var(--corLetra);*/
+    border: none;
+}
+
+.grupo legend {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+#semGrupo {
+    margin-top: 25px;
+    border: none;
+}
+
+.centralizar {
+    
 }
 
 .boxCopyScript .opcoes svg{
