@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
         scripts: {
             type: [Script],
             defeult: []
+        },
+        grupos: {
+            type: [String],
+            default: [],
         }
     }
 

@@ -19,7 +19,7 @@ app.use(
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({ mongoUrl: process.env.URI}),
-      cookie: { maxAge: 1000 * 60 * 60 * 2 },
+      cookie: { maxAge: 1000 * 60 * 60 * 12 },
     })
   )
 app.use("/", router)
