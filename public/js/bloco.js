@@ -75,7 +75,6 @@ const init = (idBox, scripts) => {
                 }else {
                     const fildGrup = document.querySelector(`#grupo${nomeGrupo.replace(/\s+/g, '')}`)
                     const divBox = document.querySelector(`#boxGrupo${nomeGrupo.replace(/\s+/g, '')}`)
-                    console.log("teste: ",divBox, nomeGrupo)
                     numId = addKeyScriptMult([el],divBox, numId);
                     fildGrup.style = 'display: block;'
                 }
