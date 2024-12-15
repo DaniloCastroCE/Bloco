@@ -95,7 +95,6 @@ body {
 .grupo{
     width: fit-content;
     padding: 10px 15px 30px;
-    margin-bottom: 25px;
     /*border: 1px solid var(--corLetra);*/
     border: none;
 }
@@ -106,7 +105,7 @@ body {
 }
 
 #semGrupo {
-    margin-top: 25px;
+    /*margin-top: 25px;*/
     border: none;
 }
 
