@@ -64,6 +64,7 @@ body {
     font-weight: 700;
     height: 30px;
     padding: 2px 4px;
+    margin: 0 1px;
     min-width: 80px;
     border-radius: 10px 0;
     background-color: var(--corFundo);
@@ -94,7 +95,7 @@ body {
 
 .grupo{
     width: fit-content;
-    padding: 10px 15px 30px;
+    padding: 10px 15px 20px;
     /*border: 1px solid var(--corLetra);*/
     border: none;
 }
