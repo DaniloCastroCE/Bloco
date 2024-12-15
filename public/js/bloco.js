@@ -626,8 +626,8 @@ const onClickGrups = () => {
 }
 
 const controleGrupos = () => {
-    if(!usuario.config.grupos){
+    if(!usuario.config.hasOwnProperty(grupos)){
         Object.assign(usuario.config, { grupos: [] })
+        atualizarConfig()
     }
-    atualizarConfig()
 }
