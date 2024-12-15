@@ -627,6 +627,7 @@ const onClickGrups = () => {
 const controleGrupos = () => {
     if(!usuario.config.hasOwnProperty('grupos')){
         Object.assign(usuario.config, { grupos: [] })
+        console.log('Criando um array de grupos')
         atualizarConfig()
     }
 }
