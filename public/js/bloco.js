@@ -58,7 +58,7 @@ const init = (idBox, scripts) => {
 
     try {
         let numId = 0
-        if(usuario.config.grupos.length !== undefined && usuario.config.grupos.length > 0){
+        if(usuario.config.grupos !== undefined && usuario.config.grupos.length > 0){
             usuario.config.grupos.forEach((el, index) => {
                 box.innerHTML += `
                 <fieldset class="grupo" id="grupo${el.replace(/\s+/g, '')}" style="display:none;">
