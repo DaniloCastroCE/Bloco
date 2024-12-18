@@ -38,9 +38,6 @@ const getUser = async () => {
                 usuario.config.scripts = []
                 //console.log("'usuario.config.scripts' === undefined")
             }
-            init("boxBloco", usuario.config.scripts)
-            controleCores()
-
             //!usuario.config.hasOwnProperty('grupos')
             if (!("grupos" in usuario.config)) {
                 Object.assign(usuario.config, { grupos: [] })
@@ -53,6 +50,9 @@ const getUser = async () => {
                 atualizarConfig()
                 console.log('Criado um rascunho ', usuario.config.rascunho)
             }
+
+            init("boxBloco", usuario.config.scripts)
+            controleCores()
 
         }).finally(() => {
             if (usuario.config.hidden === "esconder") {
