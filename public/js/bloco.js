@@ -557,7 +557,6 @@ const attNomeListGrup = () => {
     const tableListGrups = document.querySelector('#tableListGrups')
     tableListGrups.innerHTML = ''
     for (let i = 0; i < usuario.config.grupos.length; i++) {
-        console.log(usuario.config.grupos[i])
         tableListGrups.innerHTML += `
             <tr>
                 <td>
