@@ -104,7 +104,7 @@ const init = (idBox, scripts) => {
 
         box.innerHTML += `
             <div class="boxRascunho">
-                <textarea class="rascunho" id="rascunho">${usuario.config.rascunho.texto}</textarea>
+                <textarea class="rascunho" id="rascunho" placeholder="Escreva o seu rascunho aqui">${usuario.config.rascunho.texto}</textarea>
             </div>
         `
 
