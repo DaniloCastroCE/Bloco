@@ -115,8 +115,25 @@ body {
     border: none;
 }
 
+.inpListGrup {
+    padding: 4px;
+    font-size: 18px;
+    width:280px;
+}
+
+#btnCreatGrups{
+    padding: 4px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
 .centralizar {
     
+}
+
+#selectGrupo {
+    max-width: 390px;
+    padding: 2px;
 }
 
 .boxCopyScript .opcoes svg{
