@@ -71,8 +71,7 @@ const init = (idBox, scripts) => {
         let numId = 0
         if (usuario.config.grupos !== undefined && usuario.config.grupos.length > 0) {
             usuario.config.grupos.forEach((el, index) => {
-                let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                nomeSimples.replace(/[^\w\s]/gi, "").replace(/\s/g, "");
+                let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, ""); 
                 box.innerHTML += `
                 <fieldset class="grupo" id="grupo${nomeSimples}" style="display:none;">
                     <legend>${el.toUpperCase()}</legend>
@@ -86,8 +85,7 @@ const init = (idBox, scripts) => {
                 if (!nomeGrupo || el.grupo === '') {
                     numId = addKeyScriptMult([el], box, numId)
                 } else {
-                    let nomeSimples = nomeGrupo.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                    nomeSimples.replace(/[^\w\s]/gi, "").replace(/\s/g, "");
+                    let nomeSimples = nomeGrupo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "");
                     const fildGrup = document.querySelector(`#grupo${nomeSimples}`)
                     const divBox = document.querySelector(`#boxGrupo${nomeSimples}`)
                     numId = addKeyScriptMult([el], divBox, numId);
