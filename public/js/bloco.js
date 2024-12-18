@@ -535,10 +535,10 @@ const abas = (idBox) => {
                 <table>
                     <tr>
                         <td>
-                            <input type="text" id="inpCreatGrups" placeholder="Digite o nome do grupo">
+                            <input class="inpListGrup" type="text" id="inpCreatGrups" placeholder="Digite o nome do grupo">
                         </td>
                         <td>
-                            <button id="btnCreatGrups" onclick="onClickGrups()">criar</button>
+                            <button id="btnCreatGrups" onclick="onClickGrups()">CRIAR</button>
                         </td>
                     </tr>
                 </table>
@@ -564,7 +564,7 @@ const attNomeListGrup = () => {
                     <b>Nome:</b>
                 </td>
                 <td>
-                    <input type="text" value="${usuario.config.grupos[i].trim()}" onchange="mudarNomeGrupo(event,${i})">
+                    <input class="inpListGrup" type="text" value="${usuario.config.grupos[i].trim().toUpperCase()}" onchange="mudarNomeGrupo(event,${i})">
                 </td>
             </tr>
         `
@@ -578,7 +578,7 @@ const mudarNomeGrupo = (event,i) => {
         atualizarConfig()
         attNomeListGrup()
     }else {
-        usuario.config.grupos[i] = event.target.value.trim()
+        usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
