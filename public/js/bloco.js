@@ -40,8 +40,19 @@ const getUser = async () => {
             }
             init("boxBloco", usuario.config.scripts)
             controleCores()
-            controleGrupos()
 
+            //!usuario.config.hasOwnProperty('grupos')
+            if (!("grupos" in usuario.config)) {
+                Object.assign(usuario.config, { grupos: [] })
+                console.log('Criando um array de grupos')
+                atualizarConfig()
+            }
+
+            if (!("rascunho" in usuario.config)) {
+                Object.assign(usuario.config, { rascunho: { hidden: false, texto: "" } })
+                atualizarConfig()
+                console.log('Criado um rascunho ', usuario.config.rascunho)
+            }
 
         }).finally(() => {
             if (usuario.config.hidden === "esconder") {
@@ -58,36 +69,51 @@ const init = (idBox, scripts) => {
 
     try {
         let numId = 0
-        if(usuario.config.grupos !== undefined && usuario.config.grupos.length > 0){
+        if (usuario.config.grupos !== undefined && usuario.config.grupos.length > 0) {
             usuario.config.grupos.forEach((el, index) => {
+                let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                nomeSimples.replace(/[^\w\s]/gi, "").replace(/\s/g, "");
                 box.innerHTML += `
-                <fieldset class="grupo" id="grupo${el.replace(/\s+/g, '')}" style="display:none;">
+                <fieldset class="grupo" id="grupo${nomeSimples}" style="display:none;">
                     <legend>${el.toUpperCase()}</legend>
-                    <div id="boxGrupo${el.replace(/\s+/g, '')}"></div>
+                    <div id="boxGrupo${nomeSimples}"></div>
                 </fieldset>
                `
             })
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
-                if(!nomeGrupo || el.grupo === '') {
-                    numId = addKeyScriptMult([el],box, numId)
-                }else {
-                    const fildGrup = document.querySelector(`#grupo${nomeGrupo.replace(/\s+/g, '')}`)
-                    const divBox = document.querySelector(`#boxGrupo${nomeGrupo.replace(/\s+/g, '')}`)
-                    numId = addKeyScriptMult([el],divBox, numId);
+                if (!nomeGrupo || el.grupo === '') {
+                    numId = addKeyScriptMult([el], box, numId)
+                } else {
+                    let nomeSimples = nomeGrupo.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    nomeSimples.replace(/[^\w\s]/gi, "").replace(/\s/g, "");
+                    const fildGrup = document.querySelector(`#grupo${nomeSimples}`)
+                    const divBox = document.querySelector(`#boxGrupo${nomeSimples}`)
+                    numId = addKeyScriptMult([el], divBox, numId);
                     fildGrup.style = 'display: block;'
                 }
             })
 
-            
-        }else {
-            numId = addKeyScriptMult(usuario.config.scripts,box, numId)
+
+        } else {
+            numId = addKeyScriptMult(usuario.config.scripts, box, numId)
         }
 
         if (usuario.config.hidden === "btn") {
             toggleHidden("init")
         }
+
+        box.innerHTML += `
+            <div class="boxRascunho">
+                <textarea class="rascunho" id="rascunho">${usuario.config.rascunho.texto}</textarea>
+            </div>
+        `
+
+        document.querySelector('#rascunho').addEventListener('change', (event) => {
+            usuario.config.rascunho.texto = event.target.value
+            atualizarConfig()
+        })
 
     } catch (err) {
         console.error('Erro no init\nError:', err)
@@ -95,39 +121,41 @@ const init = (idBox, scripts) => {
 }
 
 const addKeyScriptMult = (array, divBox, numId) => {
-    array.forEach((el, index) => {
-        const key = (el.key.length > 0) ? `[${el.key.trim()}]` : ""
-        let cod = ''
-        const script = (key !== "") ? `${key} ${el.script}` : el.script
-        cod += `
-            <div class="boxCopyScript" id="boxCopyScript${numId}">
-                <button 
-                    class="copy" 
-                    id="copy${numId}"
-                    onclick="clickCopy(${numId})"
-                    >COPIAR</button>
-                <textarea 
-                    class="script" 
-                    id="script${numId}"
-                    onchange="onChangeScript(${numId})"
-                    placeholder="Digite o seu texto padrão (script)"
-                    >${script}</textarea>
-                <div class="opcoes">
-                    <svg onclick="clickOpcoes(${numId})"
-                    xmlns="http://www.w3.org/2000/svg" 
-                    height="24px" 
-                    viewBox="0 -960 960 960" 
-                    width="24px" 
-                    fill="#e8eaed">
-                        <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
-                    </svg>
+    if (array !== undefined) {
+        array.forEach((el, index) => {
+            const key = (el.key.length > 0) ? `[${el.key.trim()}]` : ""
+            let cod = ''
+            const script = (key !== "") ? `${key} ${el.script}` : el.script
+            cod += `
+                <div class="boxCopyScript" id="boxCopyScript${numId}">
+                    <button 
+                        class="copy" 
+                        id="copy${numId}"
+                        onclick="clickCopy(${numId})"
+                        >COPIAR</button>
+                    <textarea 
+                        class="script" 
+                        id="script${numId}"
+                        onchange="onChangeScript(${numId})"
+                        placeholder="Digite o seu texto padrão (script)"
+                        >${script}</textarea>
+                    <div class="opcoes">
+                        <svg onclick="clickOpcoes(${numId})"
+                        xmlns="http://www.w3.org/2000/svg" 
+                        height="24px" 
+                        viewBox="0 -960 960 960" 
+                        width="24px" 
+                        fill="#e8eaed">
+                            <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+                        </svg>
+                    </div>
                 </div>
-            </div>
-        `
-        divBox.innerHTML += cod
-        numId++
-        
-    });
+            `
+            divBox.innerHTML += cod
+            numId++
+
+        });
+    }
     return numId
 }
 
@@ -153,10 +181,10 @@ const clickCopy = (numId) => {
                 const corLetra = textarea.style.color
 
                 const estilo = window.getComputedStyle(textarea)
-                if(textarea.display !== 'none' && 1 > 2){
+                if (textarea.display !== 'none' && 1 > 2) {
                     textarea.style.backgroundColor = 'lightblue'
                     textarea.style.color = 'black'
-                    
+
                     setTimeout(() => {
                         textarea.style.backgroundColor = corFundo
                         textarea.style.color = corLetra
@@ -246,9 +274,9 @@ const clickOpcoes = (numId) => {
         select.innerHTML += `<option id="semGrupo" value="sem grupo">Sem Grupo</option>`
 
         usuario.config.grupos.forEach(el => {
-            if(usuario.config.scripts[numId].grupo === el){
+            if (usuario.config.scripts[numId].grupo === el) {
                 select.innerHTML += `<option selected value="${el}">${el.toUpperCase()}</option>`
-            }else {
+            } else {
                 select.innerHTML += `<option value="${el}">${el.toUpperCase()}</option>`
             }
         })
@@ -287,9 +315,9 @@ const clickOpcoes = (numId) => {
         onChangeScript(numId)
     })
     selectGrupo.addEventListener('change', (event) => {
-        if(event.target.value !== 'sem grupo'){
+        if (event.target.value !== 'sem grupo') {
             usuario.config.scripts[numId].grupo = event.target.value
-        }else {
+        } else {
             usuario.config.scripts[numId].grupo = ""
         }
         init("boxBloco", usuario.config.scripts)
@@ -393,7 +421,7 @@ const atualizarConfig = async () => {
                 valor: usuario.config
             })
         })
-        //console.log({ msg: "(atualizarConfig) - Variavel config atualizada", obj: usuario })
+    //console.log({ msg: "(atualizarConfig) - Variavel config atualizada", obj: usuario })
 }
 
 const toggleHidden = (op) => {
@@ -410,10 +438,10 @@ const toggleHidden = (op) => {
 
     Array.from(script).forEach(el => {
         const index = Number(el.id.slice(6))
-        const btn = document.querySelector(`#copy${index}`) 
+        const btn = document.querySelector(`#copy${index}`)
         mudarTextCopy(el.classList.contains('esconder'), btn, index)
     })
-    
+
     if (op !== "init" || !op) {
         if (!usuario.config.hidden) {
             usuario.config.hidden = "btn"
@@ -445,7 +473,7 @@ const svgVisivel = (op) => {
 const mudarTextCopy = (modificar, btn, i) => {
     if (modificar) {
         const key = usuario.config.scripts[i].key
-        btn.textContent = (key !== "") ? key : `COPIAR ${(i+1).toString().padStart(2, "0")}`
+        btn.textContent = (key !== "") ? key : `COPIAR ${(i + 1).toString().padStart(2, "0")}`
     } else {
         btn.textContent = "COPIAR"
     }
@@ -610,24 +638,17 @@ const controleCores = () => {
 
 const onClickGrups = () => {
     const input = document.querySelector('#inpCreatGrups')
-    if(input.value.trim() !== "" && !usuario.config.grupos.includes(input.value.trim().toLowerCase())){
+    if (input.value.trim() !== "" && !usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
         const valor = input.value.trim().toLowerCase()
         usuario.config.grupos.push(valor)
         input.value = ""
         atualizarConfig()
         attNomeListGrup()
-    }else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())){
+    } else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
         alert('grupo já cadastrado')
         input.value = ""
-    }else {
+    } else {
         input.value = ""
     }
 }
 
-const controleGrupos = () => {
-    if(!usuario.config.hasOwnProperty('grupos')){
-        Object.assign(usuario.config, { grupos: [] })
-        console.log('Criando um array de grupos')
-        atualizarConfig()
-    }
-}
