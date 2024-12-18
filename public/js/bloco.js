@@ -564,10 +564,24 @@ const attNomeListGrup = () => {
                     <b>Nome:</b>
                 </td>
                 <td>
-                    ${usuario.config.grupos[i]}
+                    <input type="text" value="${usuario.config.grupos[i].trim()}" onchange="mudarNomeGrupo(event,${i})">
                 </td>
             </tr>
         `
+    }
+}
+
+const mudarNomeGrupo = (event,i) => {
+    if(!event.target.value){
+        usuario.config.grupos.splice(i,1)
+        init("boxBloco", usuario.config.scripts)
+        atualizarConfig()
+        attNomeListGrup()
+    }else {
+        usuario.config.grupos[i] = event.target.value.trim()
+        init("boxBloco", usuario.config.scripts)
+        atualizarConfig()
+        attNomeListGrup()
     }
 }
 
