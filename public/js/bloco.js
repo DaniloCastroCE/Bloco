@@ -74,6 +74,7 @@ const init = (idBox, scripts) => {
     try {
         let numId = 0
         if (usuario.config.grupos !== undefined && usuario.config.grupos.length > 0) {
+            
             usuario.config.grupos.forEach((el, index) => {
                 let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "");
                 box.innerHTML += `
@@ -88,6 +89,7 @@ const init = (idBox, scripts) => {
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
+                
                 if (!nomeGrupo || el.grupo === '') {
                     numId = addKeyScriptMult([el], box, numId)
                 } else {
@@ -213,12 +215,12 @@ const reordenarIdsEArray = (box) => {
         let grupo = scriptElement.closest('.grupo')?.querySelector('legend')?.innerText || ''
         let novoUsuario = tratarScript(scriptValue, grupo)
 
-        Object.assign(novoUsuario, { grupo: grupo })
+        Object.assign(novoUsuario, { grupo: grupo.toLowerCase() })
         usuario.config.scripts.push(novoUsuario);
 
     });
-    console.log(usuario.config)
     atualizarConfig()
+    
 };
 
 const addKeyScriptMult = (array, divBox, numId) => {
