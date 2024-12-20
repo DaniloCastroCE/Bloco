@@ -173,6 +173,7 @@ const eventosDragDrog = (box) => {
                 }
             } else {
                 console.warn("O elemento pertence a outro grupo e não pode ser movido para este.");
+                alert("O elemento pertence a outro grupo e não pode ser movido para este.")
             }
         } else {
             // Movimento fora dos grupos
