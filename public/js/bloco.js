@@ -132,7 +132,20 @@ const init = (idBox, scripts) => {
     }
 }
 
+const removerEventos = (box) => {
+    try{
+        box.removeEventListener('dragstart', (e) => {})
+        box.removeEventListener('dragend', (e) => {})
+        box.removeEventListener('dragover', (e) => {})
+        box.removeEventListener('drop', (e) => {})
+
+    }catch (err) {
+        console.error("Errou: ", err)
+    }
+}
+
 const eventosDragDrog = (box) => {
+    removerEventos(box)
     let itemSelecionado
     // os dragging
 
