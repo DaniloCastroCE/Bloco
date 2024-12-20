@@ -51,6 +51,11 @@ const getUser = async () => {
                 console.log('Criado um rascunho ', usuario.config.rascunho)
             }
 
+            if (!("draggable" in usuario.config)) {
+                Object.assign(usuario.config, { draggable: true })
+            }
+
+
             init("boxBloco", usuario.config.scripts)
             controleCores()
 
@@ -66,19 +71,20 @@ getUser()
 const init = (idBox, scripts) => {
     const box = document.querySelector(`#${idBox}`)
     box.innerHTML = ""
-
     try {
         let numId = 0
         if (usuario.config.grupos !== undefined && usuario.config.grupos.length > 0) {
             usuario.config.grupos.forEach((el, index) => {
-                let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, ""); 
+                let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "");
                 box.innerHTML += `
                 <fieldset class="grupo" id="grupo${nomeSimples}" style="display:none;">
                     <legend>${el.toUpperCase()}</legend>
                     <div id="boxGrupo${nomeSimples}"></div>
                 </fieldset>
                `
+
             })
+
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
@@ -107,16 +113,113 @@ const init = (idBox, scripts) => {
                 <textarea class="rascunho" id="rascunho" placeholder="Escreva o seu rascunho aqui">${usuario.config.rascunho.texto}</textarea>
             </div>
         `
+        if (!usuario.config.rascunho.hidden) {
+            onclickRascunho(true)
+        }
 
         document.querySelector('#rascunho').addEventListener('change', (event) => {
             usuario.config.rascunho.texto = event.target.value
             atualizarConfig()
         })
 
+        eventosDragDrog(box)
+
+
     } catch (err) {
         console.error('Erro no init\nError:', err)
     }
 }
+
+const eventosDragDrog = (box) => {
+    let itemSelecionado
+    // os dragging
+
+    box.addEventListener('dragstart', (e) => {
+        itemSelecionado = e.target
+        //console.log('dragstart', e)
+    })
+    ''
+    box.addEventListener('dragend', (e) => {
+        //console.log('dragend', e)
+        itemSelecionado = null
+    })
+
+    box.addEventListener('dragover', (e) => {
+        e.preventDefault()
+        //console.log('dragover', e)
+    })
+
+    box.addEventListener('drop', (e) => {
+        e.preventDefault();
+        //console.log('drop', { e: e, item: itemSelecionado });
+
+        if (!itemSelecionado) return;
+
+        // Identifica o alvo do drop (se dentro de um grupo ou fora)
+        const targetGroup = e.target.closest('.grupo'); // Verifica se está dentro de um grupo
+        const targetBox = e.target.closest('.boxCopyScript'); // Verifica o elemento alvo do drop
+
+        if (targetGroup) {
+            // Movimento dentro de um grupo
+            const groupContainer = targetGroup.querySelector(`#boxGrupo${targetGroup.id.replace('grupo', '')}`);
+            if (groupContainer && groupContainer.contains(itemSelecionado)) {
+                // Mover dentro do mesmo grupo
+                if (targetBox && groupContainer.contains(targetBox)) {
+                    groupContainer.insertBefore(itemSelecionado, targetBox.nextSibling);
+                } else {
+                    groupContainer.appendChild(itemSelecionado);
+                }
+            } else {
+                console.warn("O elemento pertence a outro grupo e não pode ser movido para este.");
+            }
+        } else {
+            // Movimento fora dos grupos
+            if (targetBox && box.contains(targetBox)) {
+                box.insertBefore(itemSelecionado, targetBox.nextSibling); // Insere no nível principal
+            } else {
+                box.appendChild(itemSelecionado); // Adiciona no final do nível principal
+            }
+        }
+        reordenarIdsEArray(box)
+        itemSelecionado = null; // Reseta a referência
+    });
+}
+
+const reordenarIdsEArray = (box) => {
+    const allScripts = Array.from(box.querySelectorAll('.boxCopyScript'));
+
+    // Atualiza os IDs e organiza o array `usuario.config.scripts`
+    usuario.config.scripts = []; // Limpa o array para reconstruí-lo na nova ordem
+
+    allScripts.forEach((scriptElement, index) => {
+        const newId = `boxCopyScript${index}`;
+        const textarea = scriptElement.querySelector('.script');
+        const scriptValue = textarea.value.trim();
+
+        // Atualiza o ID do elemento
+        scriptElement.id = newId;
+
+        // Atualiza o botão de copiar e eventos relacionados ao novo ID
+        const copyButton = scriptElement.querySelector('.copy');
+        copyButton.setAttribute('id', `copy${index}`);
+        copyButton.setAttribute('onclick', `clickCopy(${index})`);
+
+        // Atualiza o evento de mudança do textarea
+        textarea.setAttribute('id', `script${index}`);
+        textarea.setAttribute('onchange', `onChangeScript(${index})`);
+
+        // Adiciona o script ao array na nova ordem
+        //onChangeScript(index)
+        let grupo = scriptElement.closest('.grupo')?.querySelector('legend')?.innerText || ''
+        let novoUsuario = tratarScript(scriptValue, grupo)
+
+        Object.assign(novoUsuario, { grupo: grupo })
+        usuario.config.scripts.push(novoUsuario);
+
+    });
+    console.log(usuario.config)
+    atualizarConfig()
+};
 
 const addKeyScriptMult = (array, divBox, numId) => {
     if (array !== undefined) {
@@ -150,20 +253,35 @@ const addKeyScriptMult = (array, divBox, numId) => {
                 </div>
             `
             divBox.innerHTML += cod
-            numId++
 
+            addDraggable(usuario.config.draggable)
+
+            numId++
         });
     }
     return numId
 }
 
+const addDraggable = (hidden) => {
+    const boxCopyScriptAll = document.querySelectorAll(`.boxCopyScript`)
+
+    boxCopyScriptAll.forEach(el => {
+        if (hidden) {
+            el.setAttribute('draggable', true)
+        } else {
+            el.setAttribute('draggable', false)
+        }
+    })
+}
+
 const onChangeScript = (numId) => {
     const texto = document.querySelector(`#script${numId}`)
-    usuario.config.scripts[numId] = tratarScript(texto.value)
+    usuario.config.scripts[numId] = tratarScript(texto.value, usuario.config.scripts[numId].grupo)
     const key = usuario.config.scripts[numId].key
     const script = usuario.config.scripts[numId].script
     texto.value = (key.length > 0) ? `[${key}] ${script}` : script
-    attScripts("att")
+    //attScripts("att")
+    atualizarConfig()
 }
 
 const clickCopy = (numId) => {
@@ -217,7 +335,7 @@ const clickCopy = (numId) => {
 
 }
 
-const tratarScript = (script) => {
+const tratarScript = (script, grupo) => {
     const regex = /\[([^\]]+)]\s*(.+)/;
     // Detalhamento da expressão regular:
     // 1. /\[([^\]]+)]\s*(.+)/
@@ -237,12 +355,15 @@ const tratarScript = (script) => {
     if (resultado) {
         return {
             key: resultado[1],
-            script: resultado[2]
+            script: resultado[2],
+            grupo: (grupo) ? grupo : ""
         }
     } else {
         return {
             key: "",
-            script: script
+            script: script,
+            grupo: (grupo) ? grupo : ""
+
         }
     }
 }
@@ -261,7 +382,7 @@ const clickOpcoes = (numId) => {
     let cod = ''
 
     cod += addInputTextareaConteudo()
-    cod += `<button type="button" class="conteudoButton" id="conteudoButtonDel" onclick="( function () {fecharModal(), attScripts('rmv', ${numId})})();">Excluir</button>`
+    cod += `<button type="button" class="conteudoButton" id="conteudoButtonDel" onclick="( function () {fecharModal(), rmvScripts(${numId})})();">Excluir</button>`
 
     titulo.textContent = `Script ${numId + 1}`
     conteudo.innerHTML = cod
@@ -320,6 +441,7 @@ const clickOpcoes = (numId) => {
         }
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
+        console.log(usuario.config)
     })
 }
 
@@ -375,7 +497,8 @@ const addScript = (alerta) => {
 
     usuario.config.scripts.push({
         key: "",
-        script: ""
+        script: "",
+        grupo: ""
     })
 
     init("boxBloco", usuario.config.scripts)
@@ -383,28 +506,11 @@ const addScript = (alerta) => {
     clickOpcoes(usuario.config.scripts.length - 1)
 }
 
-const attScripts = async (op, id) => {
-
-    if (op === 'rmv') {
-        if (confirm('Clique em OK para deletar o script'))
-            usuario.config.scripts.splice(id, 2)
-        init("boxBloco", usuario.config.scripts)
-    }
-
-    const resp = await fetch("/attScripts",
-        {
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: usuario.email,
-                valor: usuario.config.scripts,
-            })
-        }
-    )
-    //console.log({ msg: "(attScripts) - Variavel script atualizada", obj: usuario })
-
+const rmvScripts = async (id) => {
+    if (confirm('Clique em OK para deletar o script'))
+        usuario.config.scripts.splice(id, 1)
+    init("boxBloco", usuario.config.scripts)
+    atualizarConfig()
 }
 
 const atualizarConfig = async () => {
@@ -570,13 +676,13 @@ const attNomeListGrup = () => {
     }
 }
 
-const mudarNomeGrupo = (event,i) => {
-    if(!event.target.value){
-        usuario.config.grupos.splice(i,1)
+const mudarNomeGrupo = (event, i) => {
+    if (!event.target.value) {
+        usuario.config.grupos.splice(i, 1)
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    }else {
+    } else {
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
@@ -655,6 +761,7 @@ const onClickGrups = () => {
         input.value = ""
         atualizarConfig()
         attNomeListGrup()
+        init("boxBloco", usuario.config.scripts)
     } else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
         alert('grupo já cadastrado')
         input.value = ""
@@ -663,3 +770,26 @@ const onClickGrups = () => {
     }
 }
 
+const onclickRascunho = (init) => {
+    const iconRascunho = document.querySelector('#iconRascunho')
+    const rascunho = document.querySelector('#rascunho')
+    const off = "m622-453-56-56 82-82-57-57-82 82-56-56 195-195q12-12 26.5-17.5T705-840q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L622-453ZM200-200h57l195-195-28-29-29-28-195 195v57ZM792-56 509-338 290-120H120v-169l219-219L56-792l57-57 736 736-57 57Zm-32-648-56-56 56 56Zm-169 56 57 57-57-57ZM424-424l-29-28 57 57-28-29Z"
+    const on = "M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
+
+    if (init) {
+        iconRascunho.setAttribute('d', off)
+        rascunho.style.display = "none"
+        return
+    }
+
+    if (usuario.config.rascunho.hidden) {
+        iconRascunho.setAttribute('d', off)
+        rascunho.style.display = "none"
+        usuario.config.rascunho.hidden = false
+    } else {
+        iconRascunho.setAttribute('d', on)
+        rascunho.style.display = "block"
+        usuario.config.rascunho.hidden = true
+    }
+    atualizarConfig()
+}
