@@ -998,11 +998,11 @@ const onclickRascunho = (init) => {
         return
     }
 
-    if (usuario.config.rascunho.hidden) {
+    if (usuario.config.rascunho.hidden && usuario.config.scripts.length > 0) {
         iconRascunho.setAttribute('d', off)
         rascunho.style.display = "none"
         usuario.config.rascunho.hidden = false
-    } else {
+    } else if(usuario.config.scripts.length > 0){
         iconRascunho.setAttribute('d', on)
         rascunho.style.display = "block"
         usuario.config.rascunho.hidden = true
