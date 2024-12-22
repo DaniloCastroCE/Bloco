@@ -1,3 +1,4 @@
+document.querySelector('#sair').removeEventListener('click', (e) => {})
 document.querySelector('#sair').addEventListener('click', () => {
     //alert("Deslogando (Saindo)")
 
@@ -25,6 +26,201 @@ const sair = () => {
 }
 
 var usuario
+
+let grupoPadrao = ["atendimento", "outras ocorrências"]
+let padrao = [
+    {
+        scripts: [
+            {
+                key: "CONFIRMADO",
+                script: "Dados confirmados com sucesso.",
+                grupo: "atendimento",
+            },
+            {
+                key: "DESCE",
+                script: "Contato desce para receber.",
+                grupo: "atendimento",
+            },
+            {
+                key: "ACESSO LIBERADO",
+                script: "Acesso liberado pelo contato.",
+                grupo: "atendimento",
+            },
+            {
+                key: "DISPENSA",
+                script: "Não precisou do auxílio da portaria.",
+                grupo: "atendimento",
+            },
+            {
+                key: "LIG. ENCERRADA",
+                script: "Ligação encerrada por falta de comunicação.",
+                grupo: "atendimento",
+            },
+            {
+                key: "SEM CÂMERA",
+                script: "Atendimento sem o auxílio adequado das imagens das câmeras.",
+                grupo: "atendimento",
+            },
+            {
+                key: "NÃO ATENDEU",
+                script: "Não foi atendido: Interfone da unidade, ",
+                grupo: "atendimento",
+            },
+
+        ],
+        nome: "A - Atendimento",
+    },
+    {
+        scripts: [
+            {
+                key: "PORTÃO ABERTO",
+                script: "Aparentemente, o portão encontra-se fechado nas imagens ao vivo, não é possível identificar portões abertos.",
+                grupo: "outras ocorrências",
+            },
+            {
+                key: "ELEVADOR",
+                script: "Elevador livre nas imagens ao vivo.",
+                grupo: "outras ocorrências",
+            },
+            {
+                key: "CARONA",
+                script: "Falso negativo. Não houve acesso carona. Contagem errada.",
+                grupo: "outras ocorrências",
+            },
+            {
+                key: "PÂNICO",
+                script: "Na análise dos vídeos não é possível identificar alteração no local, aparentemente tudo bem e sem alteração.",
+                grupo: "outras ocorrências",
+            },
+            {
+                key: "SEM GRAVAÇÃO",
+                script: "Gravações não processadas ou indisponível para visualização, aparentemente tudo normal nas imagens ao vivo.",
+                grupo: "outras ocorrências",
+            },
+            {
+                key: "ALARME",
+                script: "Na análise das imagens ao vivo, não foram identificadas situação preocupantes no condomínio.",
+                grupo: "outras ocorrências",
+            },
+        ],
+        nome: "B - Outras Ocorrências",
+    },
+    {
+        scripts: [
+            {
+                key: "",
+                script: "",
+                grupo: "",
+            },
+        ],
+        nome: "A + B - Atendimento com Outras Ocorrências ",
+    },
+
+    {
+        scripts: [
+            {
+                key: "",
+                script: "",
+                grupo: "",
+            },
+        ],
+        nome: "Vazio",
+    },
+]
+
+padrao[2].scripts = padrao[0].scripts.concat(padrao[1].scripts)
+
+const checkPadrao = (idBox) => {
+    const box = document.querySelector(`#${idBox}`)
+    if(usuario.config.scripts.length === 0){
+        box.innerHTML = `
+            <div class="boxPadrao" id="boxPadrao">
+                <label for="selectPadrao">Escolha os textos padrões </label>
+                <select id="selectPadrao" onchange="onchangeSelectPadrao(event)"></select>
+                <button type"button" class="custom-button" onclick="buttonPadrao()">Criar</button>
+                <div class="checkboxs">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="addGrupoPadrao" />
+                        <span class="custom-checkbox"></span>
+                        <span class="checkbox-label">Organizar em grupos</span>
+                    </label>
+                </div>
+            </div>
+                
+            <div id="listPadrao"></div>
+        `
+        const selectPadrao = document.querySelector(`#selectPadrao`)
+
+        padrao.forEach((el, index) => {
+            let nome
+            if(el.nome.length > 15){
+                nome = `${el.nome.substring(0,15)}...`
+            }else {
+                nome = el.nome
+            }
+            if(index === 0 && el.scripts.length > 0){
+                selectPadrao.innerHTML += `
+                    <option value="${index}" selected>${nome.toLocaleUpperCase()}</option>
+                `
+            }else if(el.scripts.length > 0){
+                selectPadrao.innerHTML += `
+                    <option value="${index}">${nome.toLocaleUpperCase()}</option>
+                `
+            }
+        })
+
+        addlistPadrao()
+    }
+}
+
+const buttonPadrao = (event) => {
+    const valor = document.querySelector(`#selectPadrao`).value
+    usuario.config.scripts = padrao[valor].scripts
+    if(document.querySelector("#addGrupoPadrao").checked){
+        usuario.config.grupos = grupoPadrao
+    }else if(usuario.config.grupos.length === grupoPadrao.length && usuario.config.grupos.every((el, i) => el === grupoPadrao[i])){
+        usuario.config.grupos = []
+    }
+
+
+    init("boxBloco", usuario.config.scripts)
+    atualizarConfig()
+}
+
+const onchangeSelectPadrao = (event) => {
+    addlistPadrao(event.target.value)
+}
+
+
+const addlistPadrao = (valor) => {
+    if(!valor){
+        valor = document.querySelector(`#selectPadrao`).value
+    }
+
+    try {
+        const listPadrao = document.querySelector('#listPadrao')
+        listPadrao.innerHTML = `<h2 id="ttListPadrao">${padrao[valor].nome}</h2>`
+        padrao[valor].scripts.forEach(el => {
+            listPadrao.innerHTML += `
+                <table>
+                    <tr>
+                        <td>Key:</td><td>${el.key}</td>
+                    </tr>
+                    <tr>
+                        <td>Grupo:</td><td>${(el.grupo) ? el.grupo : "Sem Grupo"}</td>
+                    </tr>
+                    <tr style="margin-bottom: 10px;">
+                        <td>Script:</td><td class="tdScript">${el.script}</td>
+                    </tr>
+                </table>
+            `
+        })
+    } catch (err) {
+        console.error("ERROR:\n", err)
+        document.querySelector('#boxBloco').innerHTML = ''
+    }
+  
+}
 
 const getUser = async () => {
     fetch("/getUser")
@@ -83,9 +279,7 @@ const init = (idBox, scripts) => {
                     <div id="boxGrupo${nomeSimples}"></div>
                 </fieldset>
                `
-
             })
-
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
@@ -100,7 +294,6 @@ const init = (idBox, scripts) => {
                     fildGrup.style = 'display: block;'
                 }
             })
-
 
         } else {
             numId = addKeyScriptMult(usuario.config.scripts, box, numId)
@@ -119,12 +312,14 @@ const init = (idBox, scripts) => {
             onclickRascunho(true)
         }
 
+        document.querySelector('#rascunho').removeEventListener('change', (e) => {})
         document.querySelector('#rascunho').addEventListener('change', (event) => {
             usuario.config.rascunho.texto = event.target.value
             atualizarConfig()
         })
 
         eventosDragDrog(box)
+        checkPadrao(idBox)
 
 
     } catch (err) {
@@ -427,6 +622,7 @@ const clickOpcoes = (numId) => {
     inputKey.value = script.key
     inputScript.value = script.script
 
+    inputKey.removeEventListener('change', (e) => {})
     inputKey.addEventListener('change', (event) => {
         script.key = event.target.value
         if (event.target.value.length > 0) {
@@ -440,6 +636,8 @@ const clickOpcoes = (numId) => {
         const copy = document.querySelector(`#copy${numId}`)
         mudarTextCopy(textarea.classList.contains("esconder"), copy, numId)
     })
+
+    inputScript.removeEventListener('change', (e) => {})
     inputScript.addEventListener('change', (event) => {
         script.script = event.target.value
         if (script.key) {
@@ -449,6 +647,8 @@ const clickOpcoes = (numId) => {
         }
         onChangeScript(numId)
     })
+
+    selectGrupo.removeEventListener('change', (e) => {})
     selectGrupo.addEventListener('change', (event) => {
         if (event.target.value !== 'sem grupo') {
             usuario.config.scripts[numId].grupo = event.target.value
@@ -457,7 +657,6 @@ const clickOpcoes = (numId) => {
         }
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
-        console.log(usuario.config)
     })
 }
 
