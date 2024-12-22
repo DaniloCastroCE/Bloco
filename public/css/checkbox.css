@@ -1,0 +1,48 @@
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  /* Oculta o checkbox original */
+  .checkbox-container input[type="checkbox"] {
+    display: none;
+  }
+
+  /* Estilo para o custom checkbox */
+  .custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2575fc;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  /* Ícone de "check" */
+  .custom-checkbox::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #2575fc;
+    display: none;
+    border-radius: 2px;
+  }
+
+  /* Estilo para checkbox marcado */
+  input[type="checkbox"]:checked + .custom-checkbox::after {
+    display: block;
+  }
+
+  /* Animação de hover */
+  .checkbox-container:hover .custom-checkbox {
+    box-shadow: 0 0 8px rgba(37, 117, 252, 0.5);
+  }
+
+  /* Texto ao lado */
+  .checkbox-label {
+    font-size: 16px;
+  }

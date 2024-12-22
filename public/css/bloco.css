@@ -10,6 +10,31 @@ body {
     color: var(--corLetra)
 }
 
+.custom-button {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #1a0d52, #2575fc);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+
+  .custom-button:hover {
+    background: linear-gradient(135deg, #2575fc, #1a0d52);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
 .menu {
     background: var(--corFundoMenu);
     color: var(--corLetraMenu);
@@ -154,4 +179,57 @@ body {
 
 .lado-a-lado {
     display: inline-block;
+}
+
+.marginTOP {
+    margin-top: 10px;
+}
+
+.boxPadrao {
+    margin: 5px auto;
+    padding: 10px 10px;
+    width: fit-content;
+    background-color: #d8f5f7;
+    border-radius: 5px;
+}
+
+.boxPadrao label {
+    font-size: 16px;
+    font-weight: 700;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.boxPadrao select {
+    padding: 12px 10px;
+    font-size: 16px;
+}
+
+.checkboxs {
+    margin: 20px auto 5px;
+    width: fit-content;
+}
+
+#listPadrao {
+    max-width: 550px;
+    margin: 10px auto;
+}
+
+#listPadrao #ttListPadrao {
+    text-align: center;
+    font-weight: 700;
+    padding: 20px;
+}
+
+#listPadrao table {
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+#listPadrao table tr td {
+    padding: 2px 5px;
+    
+}
+
+.tdScript {
+    max-width: 100%;
 }
