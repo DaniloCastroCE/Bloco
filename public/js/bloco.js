@@ -226,8 +226,9 @@ const getUser = async () => {
     fetch("/getUser")
         .then(resp => resp.json())
         .then((data) => {
+            const nomeCliente = (data.nome.length > 4) ? data.nome.substring(0,4) : data.nome
             document.title = `${data.nome.toUpperCase()}`
-            document.querySelector('#meuNome').textContent = data.nome.toUpperCase()
+            document.querySelector('#meuNome').textContent = nomeCliente.toUpperCase()
             //alert(`Olá ${data.nome}, seja bem-vindo`)
             usuario = data
             if (usuario.config.scripts === undefined) {
