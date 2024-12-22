@@ -140,7 +140,7 @@ const checkPadrao = (idBox) => {
                 <button type"button" class="custom-button" onclick="buttonPadrao()">Criar</button>
                 <div class="checkboxs">
                     <label class="checkbox-container">
-                        <input type="checkbox" id="addGrupoPadrao" />
+                        <input type="checkbox" id="addGrupoPadrao" checked />
                         <span class="custom-checkbox"></span>
                         <span class="checkbox-label">Organizar em grupos</span>
                     </label>
