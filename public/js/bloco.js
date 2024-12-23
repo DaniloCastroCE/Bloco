@@ -158,7 +158,7 @@ const checkPadrao = (idBox) => {
             }else {
                 nome = el.nome
             }
-            if(index === 0 && el.scripts.length > 0){
+            if(index === 2 && el.scripts.length > 0){
                 selectPadrao.innerHTML += `
                     <option value="${index}" selected>${nome.toLocaleUpperCase()}</option>
                 `
