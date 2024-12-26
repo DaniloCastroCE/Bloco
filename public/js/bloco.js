@@ -876,7 +876,7 @@ const abas = (idBox) => {
                 <div class="boxRange">
                     <span></span>
                     <div class="rangeValor">
-                        <input id="range" type="range" max="100" min="20" value="100" step="1" onchange="getRange(this)"/>
+                        <input id="range" type="range" max="100" min="20" value="100" step="1" onchange="getRange(this)" onmousedown="mouseDown(this)" onmouseup="mouseUp(this)" oninput="inputRange(this)"/>
                         <input id="valor" type="number" max="100" min="20 value="100" onchange="changeRangePorcentagem(this)"><span>%</span>
                     </div>
                 </div>
@@ -915,6 +915,42 @@ const alterarWidthBoxBloco = (valor) => {
     boxBloco.style.width = `${valor}%`;
     usuario.config.widthBloco = valor
     atualizarConfig()
+}
+
+const inputRange = (range) => {
+    const boxBloco = document.querySelector('#boxBloco')
+    boxBloco.style.width = `${range.value}%`
+    const valorPorcentagem = document.querySelector('#valor')
+    valorPorcentagem.value = range.value
+}
+
+const mouseDown = (obj) => {
+    document.querySelector('#tituloModal').style.background = 'none'
+    document.querySelector('#boxConteudoModal').style.backgroundColor = 'rgba(255,255,255,0.1)'
+    const buttonsAbasAll = document.querySelectorAll('.buttonsAbas')
+    
+    const boxBloco = document.querySelector('#boxBloco')
+    const root = document.documentElement
+    const corLetra = getComputedStyle(root).getPropertyValue('--corLetra').trim();
+    boxBloco.style.border = `1px solid ${corLetra}`
+    
+    buttonsAbasAll.forEach(el => {
+        el.style.background = 'none'
+    })
+}
+
+const mouseUp = (obj) => {
+    document.querySelector('#tituloModal').style.backgroundColor = '#2d4b7b'
+    document.querySelector('#boxConteudoModal').style.backgroundColor = 'white'
+
+    const boxBloco = document.querySelector('#boxBloco')
+    boxBloco.style.border = 'none'
+
+    const buttonsAbasAll = document.querySelectorAll('.buttonsAbas')    
+    buttonsAbasAll.forEach(el => {
+        el.style.background = '#f1f1f1'
+    })
+    
 }
 
 const attNomeListGrup = () => {
