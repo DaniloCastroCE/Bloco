@@ -4,18 +4,3 @@
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
 }
-
-footer {
-    height: auto;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0,0,0,0.5);
-    color: rgba(255,255,255,0.6);
-    width: 100%;
-    text-align: center;
-    padding: 1px 0;
-}
