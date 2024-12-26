@@ -78,6 +78,7 @@ body {
 }
 
 
+
 .boxCopyScript, .boxRascunho {
     display: flex;
     align-items: center;
@@ -233,3 +234,4 @@ body {
 .tdScript {
     max-width: 100%;
 }
+
