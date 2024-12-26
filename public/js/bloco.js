@@ -252,6 +252,10 @@ const getUser = async () => {
                 Object.assign(usuario.config, { draggable: true })
             }
 
+            if(!("widthBloco" in usuario.config)) {
+                Object.assign(usuario.config, { widthBloco: "100" })
+            }
+            alterarWidthBoxBloco(usuario.config.widthBloco)
 
             init("boxBloco", usuario.config.scripts)
             controleCores()
@@ -808,7 +812,7 @@ const abas = (idBox) => {
             <div class="boxButtons">
                 <div class="buttonsAbas buttonAbaAtiva" onclick="clickAbas(event, 'aba1')">CORES</div>
                 <div class="buttonsAbas" onclick="clickAbas(event, 'aba2')">GRUPOS</div>
-                <div class="buttonsAbas" onclick="clickAbas(event, 'aba3')">Aba 3</div>
+                <div class="buttonsAbas" onclick="clickAbas(event, 'aba3')">POSIÇÃO</div>
             </div>
             <div class="conteudoAbas showAba" id="aba1">
 
@@ -868,11 +872,49 @@ const abas = (idBox) => {
                 <table id="tableListGrups"></table>
             </div>
             <div class="conteudoAbas" id="aba3">
-                <h3 class="tdTitulo">Aba 3</h3>
+                <h3 class="tdTitulo">Tamanho do box dos Scripts</h3>
+                <div class="boxRange">
+                    <span></span>
+                    <div class="rangeValor">
+                        <input id="range" type="range" max="100" min="20" value="100" step="1" onchange="getRange(this)"/>
+                        <input id="valor" type="number" max="100" min="20 value="100" onchange="changeRangePorcentagem(this)"><span>%</span>
+                    </div>
+                </div>
             </div>
         </div>
     `
     attNomeListGrup()
+
+    const range = document.querySelector('#range')
+    range.value = usuario.config.widthBloco
+    document.querySelector('#valor').value = range.value
+}
+
+const getRange = (range) => {
+    const valorPorcentagem = document.querySelector('#valor')
+    valorPorcentagem.value = range.value
+    alterarWidthBoxBloco(range.value)
+}
+
+const changeRangePorcentagem = (input) => {
+    const range = document.querySelector('#range')
+    if(input.value < 20){
+        input.value = 20
+        range.value = 20
+    }else if(input.value > 100){
+        input.value = 100
+        range.value = 100
+    }else {
+        range.value = input.value
+    }
+    alterarWidthBoxBloco(input.value)
+}
+
+const alterarWidthBoxBloco = (valor) => {
+    const boxBloco = document.querySelector('#boxBloco')
+    boxBloco.style.width = `${valor}%`;
+    usuario.config.widthBloco = valor
+    atualizarConfig()
 }
 
 const attNomeListGrup = () => {
