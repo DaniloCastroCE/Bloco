@@ -38,7 +38,8 @@ const getUser = async (req, res) => {
     const id = req.session.userId
     try{
         const {nome, email, config} = await User.findOne({_id: id})
-
+        const data = {data: new Date().toISOString(), nome : nome}
+        console.log(data)
         try {
             const ultAcesso = new Date().toISOString();  // Obtendo a data/hora atual no formato ISO
 
