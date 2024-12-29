@@ -41,7 +41,6 @@ const getUser = async (req, res) => {
 
         try{
             const result = await User.updateOne({email: email}, {ultAcesso: new Date().toISOString() } )
-            console.log(result)
         }catch(err) {
             console.error(err)
         }
