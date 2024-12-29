@@ -46,7 +46,7 @@ const getUser = async (req, res) => {
             timeStyle: 'medium', 
         }).format(now);
         await User.updateOne({ email: email }, { $set: { ultAcesso: {data: formattedDate, ip: clientIp} } })
-        res.json({ nome: nome, email: email, ultAcesso: formattedDate, config: config })
+        res.json({ nome: nome, email: email, ultAcesso: {data: formattedDate, ip: clientIp}, config: config })
     } catch (err) {
         res.json({ error: err })
     }
