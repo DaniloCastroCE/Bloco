@@ -40,8 +40,15 @@ const userSchema = new mongoose.Schema({
             default: [],
         }
     }, ultAcesso : {
-        type: String,
-        default: "Default"
+        type: Object,
+        data : {
+            type: String,
+            default: "vazio",
+        },
+        ip: {
+            type: String,
+            default: "vazio"
+        },
     }
 
 }, { timestamps: true });
