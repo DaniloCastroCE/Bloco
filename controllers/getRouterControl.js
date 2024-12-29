@@ -38,13 +38,14 @@ const getUser = async (req, res) => {
     const id = req.session.userId
     try {
         const { nome, email, config } = await User.findOne({ _id: id })
+        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         const now = new Date();
         const formattedDate = new Intl.DateTimeFormat('pt-BR', {
             timeZone: 'America/Fortaleza',
             dateStyle: 'full',
             timeStyle: 'medium', 
         }).format(now);
-        await User.updateOne({ email: email }, { $set: { ultAcesso: formattedDate } })
+        await User.updateOne({ email: email }, { $set: { ultAcesso: {data: formattedDate, ip: clientIp} } })
         res.json({ nome: nome, email: email, ultAcesso: formattedDate, config: config })
     } catch (err) {
         res.json({ error: err })
