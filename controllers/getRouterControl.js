@@ -1,33 +1,33 @@
 const path = require('path')
 const User = require('../model/user')
 
-const routerTest = (req, res)  => {
+const routerTest = (req, res) => {
     const data = {
         msg: 'Isto é apanes um teste'
     }
     res.render('test', data)
 }
 
-const getInit = (req,res) => {
-    res.render('init', {mensagem: null})
+const getInit = (req, res) => {
+    res.render('init', { mensagem: null })
 }
 
 const getCadastro = (req, res) => {
-    res.render('cadastro', {mensagem: null})
+    res.render('cadastro', { mensagem: null })
 }
 
 const logout = (req, res) => {
     const nome = req.session.username
     req.session.destroy((err) => {
         if (err) {
-          return res.status(500).send("Erro ao fazer logout.")
+            return res.status(500).send("Erro ao fazer logout.")
         }
-        if(nome !== undefined){
-            res.render('init', {mensagem: [`Usuario ${nome} deslogado`]})
-        }else {
-            res.render('init', {mensagem: null})
+        if (nome !== undefined) {
+            res.render('init', { mensagem: [`Usuario ${nome} deslogado`] })
+        } else {
+            res.render('init', { mensagem: null })
         }
-      })
+    })
 }
 
 const bloco = (req, res) => {
@@ -36,15 +36,20 @@ const bloco = (req, res) => {
 
 const getUser = async (req, res) => {
     const id = req.session.userId
-    try{
-        const {nome, email, config} = await User.findOne({_id: id})
-        const result = await User.updateOne({email: email}, {$set: {ultAcesso : new Date().toUTCString()} })
-        //console.log({result: result, email: email, nome: nome})
-        res.json({nome: nome, email: email, config: config})
-    }catch(err) {
-        res.json({error: err})
+    try {
+        const { nome, email, config } = await User.findOne({ _id: id })
+        const now = new Date();
+        const formattedDate = new Intl.DateTimeFormat('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+            dateStyle: 'full',
+            timeStyle: 'medium', 
+        }).format(now);
+        await User.updateOne({ email: email }, { $set: { ultAcesso: formattedDate } })
+        res.json({ nome: nome, email: email, config: config })
+    } catch (err) {
+        res.json({ error: err })
     }
-    
+
 }
 
 module.exports = {
