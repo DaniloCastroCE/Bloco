@@ -38,21 +38,6 @@ const getUser = async (req, res) => {
     const id = req.session.userId
     try{
         const {nome, email, config} = await User.findOne({_id: id})
-        const data = {data: new Date().toISOString(), nome : nome}
-        console.log(data)
-        try {
-            const ultAcesso = new Date().toISOString();  // Obtendo a data/hora atual no formato ISO
-
-            // Atualizando o usuário com a data de último acesso
-            const result = await User.updateOne({ email: email }, { $set: { ultAcesso: ultAcesso } });
-
-            if (result.modifiedCount === 0) {
-                console.log("Nenhuma atualização realizada");
-            }
-        }catch (err){
-            console.error(err)
-        }
-        
         res.json({nome: nome, email: email, config: config})
     }catch(err) {
         res.json({error: err})
