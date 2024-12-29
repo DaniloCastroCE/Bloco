@@ -50,7 +50,7 @@ const getUser = async (req, res) => {
               minute: '2-digit', 
               second: '2-digit'
             });*/
-            const ultAcesso = new Date()
+            const ultAcesso = "teste"
             await User.updateOne({email:email}, {$set: {ultAcesso: ultAcesso}})
         }catch (err){
             console.error(err)
