@@ -38,6 +38,24 @@ const getUser = async (req, res) => {
     const id = req.session.userId
     try{
         const {nome, email, config} = await User.findOne({_id: id})
+
+        try {
+            const data = new Date()
+            const formato = new Intl.DateTimeFormat('pt-BR', {
+              timeZone: 'UTC', 
+              year: 'numeric', 
+              month: '2-digit', 
+              day: '2-digit',
+              hour: '2-digit', 
+              minute: '2-digit', 
+              second: '2-digit'
+            });
+            const ultAcesso = formato.format(data)
+            await User.updateOne({email:email,}, {$set: {ultAcesso: ultAcesso}})
+        }catch (err){
+            console.error(err)
+        }
+        
         res.json({nome: nome, email: email, config: config})
     }catch(err) {
         res.json({error: err})
