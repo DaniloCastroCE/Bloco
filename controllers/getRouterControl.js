@@ -51,7 +51,7 @@ const getUser = async (req, res) => {
               second: '2-digit'
             });
             const ultAcesso = formato.format(data)
-            await User.updateOne({email:email,}, {$set: {ultAcesso: ultAcesso}})
+            await User.updateOne({email:email}, {$set: {ultAcesso: ultAcesso}})
         }catch (err){
             console.error(err)
         }
