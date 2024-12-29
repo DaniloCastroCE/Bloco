@@ -40,7 +40,7 @@ const getUser = async (req, res) => {
         const { nome, email, config } = await User.findOne({ _id: id })
         const now = new Date();
         const formattedDate = new Intl.DateTimeFormat('pt-BR', {
-            timeZone: 'America/Sao_Paulo',
+            timeZone: 'America/Fortaleza',
             dateStyle: 'full',
             timeStyle: 'medium', 
         }).format(now);
