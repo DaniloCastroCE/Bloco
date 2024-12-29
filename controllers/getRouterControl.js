@@ -40,7 +40,7 @@ const getUser = async (req, res) => {
         const {nome, email, config} = await User.findOne({_id: id})
 
         try{
-            const result = await User.updateOne({email: email}, { {$set: ultAcesso: new Date().toISOString() } } )
+            const result = await User.updateOne({ email: email }, { $set: { ultAcesso: new Date().toISOString() } })
         }catch(err) {
             console.error(err)
         }
