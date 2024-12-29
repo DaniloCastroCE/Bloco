@@ -37,6 +37,7 @@ const bloco = (req, res) => {
 const getUser = async (req, res) => {
     const id = req.session.userId
     try{
+        const {nome, email, config} = await User.findOne({_id: id})
 
         try{
             const result = await User.updateOne({email: email}, {ultAcesso: new Date().toISOString() } )
@@ -45,7 +46,6 @@ const getUser = async (req, res) => {
             console.error(err)
         }
         
-        const {nome, email, config} = await User.findOne({_id: id})
         res.json({nome: nome, email: email, config: config})
     }catch(err) {
         res.json({error: err})
