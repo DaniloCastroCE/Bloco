@@ -18,7 +18,7 @@ const putAtualizarScript = async (req, res) => {
 const putAtualizarConfig = async (req, res) => {
     const {email, valor} = req.body
 
-    await User.updateOne({email:email,}, {$set: {config: valor}})
+    await User.updateOne({email:email}, {$set: {config: valor}})
 }
 
 
