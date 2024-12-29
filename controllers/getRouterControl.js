@@ -40,7 +40,7 @@ const getUser = async (req, res) => {
         const {nome, email, config} = await User.findOne({_id: id})
 
         try {
-            const data = new Date()
+            /*const data = new Date()
             const formato = new Intl.DateTimeFormat('pt-BR', {
               timeZone: 'UTC', 
               year: 'numeric', 
@@ -49,8 +49,8 @@ const getUser = async (req, res) => {
               hour: '2-digit', 
               minute: '2-digit', 
               second: '2-digit'
-            });
-            const ultAcesso = formato.format(data)
+            });*/
+            const ultAcesso = new Date()
             await User.updateOne({email:email}, {$set: {ultAcesso: ultAcesso}})
         }catch (err){
             console.error(err)
