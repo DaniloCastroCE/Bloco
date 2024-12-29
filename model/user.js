@@ -33,12 +33,15 @@ const userSchema = new mongoose.Schema({
         type: Object,
         scripts: {
             type: [Script],
-            defeult: []
+            default: []
         },
         grupos: {
             type: [String],
             default: [],
         }
+    }, ultAcesso : {
+        type: String,
+        default: new Date.toUTCString()
     }
 
 }, { timestamps: true });
