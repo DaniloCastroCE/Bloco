@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
         }
     }, ultAcesso : {
         type: String,
-        default: new Date.toUTCString()
+        default: "Default"
     }
 
 }, { timestamps: true });
