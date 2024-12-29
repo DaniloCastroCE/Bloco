@@ -38,7 +38,8 @@ const getUser = async (req, res) => {
     const id = req.session.userId
     try{
         const {nome, email, config} = await User.findOne({_id: id})
-        await User.updateOne({email: email}, {$set: {ultAcesso : new Date().toUTCString()} })
+        const result = await User.updateOne({email: email}, {$set: {ultAcesso : new Date().toUTCString()} })
+        console.log({result: result, email: email, nome: nome})
         res.json({nome: nome, email: email, config: config})
     }catch(err) {
         res.json({error: err})
