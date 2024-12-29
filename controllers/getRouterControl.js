@@ -40,18 +40,14 @@ const getUser = async (req, res) => {
         const {nome, email, config} = await User.findOne({_id: id})
 
         try {
-            /*const data = new Date()
-            const formato = new Intl.DateTimeFormat('pt-BR', {
-              timeZone: 'UTC', 
-              year: 'numeric', 
-              month: '2-digit', 
-              day: '2-digit',
-              hour: '2-digit', 
-              minute: '2-digit', 
-              second: '2-digit'
-            });*/
-            const ultAcesso = "teste"
-            await User.updateOne({email:email}, {$set: {ultAcesso: ultAcesso}})
+            const ultAcesso = new Date().toISOString();  // Obtendo a data/hora atual no formato ISO
+
+            // Atualizando o usuário com a data de último acesso
+            const result = await User.updateOne({ email: email }, { $set: { ultAcesso: ultAcesso } });
+
+            if (result.modifiedCount === 0) {
+                console.log("Nenhuma atualização realizada");
+            }
         }catch (err){
             console.error(err)
         }
