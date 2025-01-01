@@ -993,7 +993,9 @@ const mudarNomeGrupo = (event, i) => {
         } else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
             alert('grupo já cadastrado')
             input.value = ""
+            usuario.config.grupos.splice(i, 1)
         } else {
+            usuario.config.grupos.splice(i, 1)
             input.value = ""
         }
         
