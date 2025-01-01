@@ -982,6 +982,7 @@ const mudarNomeGrupo = (event, i) => {
         atualizarConfig()
         attNomeListGrup()
     } else {
+        alert('Nome de grupo existente, escolha outro nome')
         event.target.value = usuario.config.grupos[i].trim().toUpperCase()
     }
 }
