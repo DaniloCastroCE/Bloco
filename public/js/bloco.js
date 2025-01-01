@@ -976,29 +976,13 @@ const mudarNomeGrupo = (event, i) => {
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else {
-        /*usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
+    } else (!(usuario.config.grupos.includes( event.target.value.trim().toLowerCase()) )){
+        usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
-        attNomeListGrup()*/
-
-        const input = event.target
-        if (input.value.trim() !== "" && !usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
-            const valor = input.value.trim().toLowerCase()
-            usuario.config.grupos.push(valor)
-            input.value = ""
-            atualizarConfig()
-            attNomeListGrup()
-            init("boxBloco", usuario.config.scripts)
-        } else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
-            alert('grupo já cadastrado')
-            input.value = ""
-            usuario.config.grupos.splice(i, 1)
-        } else {
-            usuario.config.grupos.splice(i, 1)
-            input.value = ""
-        }
-        
+        attNomeListGrup()
+    } else {
+        event.target.value = usuario.config.grupos[i]
     }
 }
 
