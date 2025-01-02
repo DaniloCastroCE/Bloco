@@ -986,15 +986,13 @@ const compararNomeGrupo = (str) => {
 }    
 
 const mudarNomeGrupo = (event, i) => {
-
-    console.log(compararNomeGrupo(event.target.value))
-    
+   
     if (!event.target.value) {
         usuario.config.grupos.splice(i, 1)
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else if(!( usuario.config.grupos.includes(event.target.value.trim().toLowerCase()) )){
+    } else if(!compararNomeGrupo(event.target.value)){
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
