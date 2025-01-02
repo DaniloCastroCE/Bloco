@@ -982,7 +982,7 @@ const mudarNomeGrupo = (event, i) => {
         atualizarConfig()
         attNomeListGrup()
     } else {
-        alert('Nome de grupo existente, escolha outro nome')
+        alert(`Já existe o grupo ${event.target.value.toUpperCase()}, escolha outro nome`)
         event.target.value = usuario.config.grupos[i].trim().toUpperCase()
         init("boxBloco", usuario.config.scripts)
     }
