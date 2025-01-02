@@ -970,23 +970,20 @@ const attNomeListGrup = () => {
     }
 }
 
-
-
 const compararNomeGrupo = (str) => {
     let compare =  false
     const nomeSimples = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
     usuario.config.grupos.forEach((el, index) => {
         const nomeGrupo = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
-
-        console.log({str: nomeSimples, grupo: nomeGrupo })
+   
         if(nomeGrupo === nomeSimples){
             compare = true
             break
         }
+        console.log({str: nomeSimples, grupo: nomeGrupo, compare: compare })
     })
     return compare
-
 }    
 
 const mudarNomeGrupo = (event, i) => {
