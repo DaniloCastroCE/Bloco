@@ -971,6 +971,11 @@ const attNomeListGrup = () => {
 }
 
 const mudarNomeGrupo = (event, i) => {
+
+    const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "")
+
+    console.log(eventNomeSimplens)
+    
     if (!event.target.value) {
         usuario.config.grupos.splice(i, 1)
         init("boxBloco", usuario.config.scripts)
