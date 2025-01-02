@@ -970,15 +970,16 @@ const attNomeListGrup = () => {
     }
 }
 
-function removeAcentos(str) {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
-}
+
 
 const compararNomeGrupo = (str) => {
     const nomeSimples = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
     usuario.config.grupos.forEach((el, index) => {
-        if(el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim() === nomeSimples){
+        const nomeGrupo = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
+
+        console.log({str: nomeSimples, grupo: nomeGrupo })
+        if(nomeGrupo === nomeSimples){
             return true
         }
     })
