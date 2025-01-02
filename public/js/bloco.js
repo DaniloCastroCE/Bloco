@@ -982,7 +982,7 @@ const mudarNomeGrupo = (event, i) => {
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else if(!(usuario.config.grupos.normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes( eventNomeSimplens ) )){
+    } else if(!(usuario.config.grupos.includes( eventNomeSimplens ) )){
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
