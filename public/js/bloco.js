@@ -986,7 +986,6 @@ const compararNomeGrupo = (str) => {
 }    
 
 const mudarNomeGrupo = (event, i) => {
-   
     if (!event.target.value) {
         usuario.config.grupos.splice(i, 1)
         init("boxBloco", usuario.config.scripts)
@@ -1077,7 +1076,7 @@ const onClickGrups = () => {
         attNomeListGrup()
         init("boxBloco", usuario.config.scripts)
     } else if ( compararNomeGrupo(input.value) ) {
-        alert('grupo já cadastrado')
+        alert(`grupo ${input.value.toUpperCase().trim()} já cadastrado, escolha outro nome`)
         input.value = ""
     } else {
         input.value = ""
