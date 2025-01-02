@@ -972,8 +972,8 @@ const attNomeListGrup = () => {
 
 const mudarNomeGrupo = (event, i) => {
 
-    const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
-    const gurpsNomeSImplens = usuario.config.grupos[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
+    const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
+    const gurpsNomeSImplens = usuario.config.grupos[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
     console.log({event: eventNomeSimplens, grupo: gurpsNomeSImplens})
     
@@ -982,7 +982,7 @@ const mudarNomeGrupo = (event, i) => {
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else if(!(usuario.config.grupos.normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes( event.target.value.trim().toLowerCase()) )){
+    } else if(!(usuario.config.grupos.normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes( eventNomeSimplens ) )){
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
