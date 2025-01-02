@@ -972,9 +972,10 @@ const attNomeListGrup = () => {
 
 const mudarNomeGrupo = (event, i) => {
 
-    const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "")
+    const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "").toUpperCase()
+    const gurpsNomeSImplens = usuario.config.grupos[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "").toUpperCase()
 
-    console.log(eventNomeSimplens)
+    console.log({event: eventNomeSimplens, grupo: gurpsNomeSImplens)
     
     if (!event.target.value) {
         usuario.config.grupos.splice(i, 1)
