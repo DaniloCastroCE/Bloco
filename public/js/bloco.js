@@ -970,6 +970,18 @@ const attNomeListGrup = () => {
     }
 }
 
+function removeAcentos(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+}
+
+function buscaNomeGrupo(nomeBusca, listaDeGrupos) {
+  // Remover acentos da string de busca
+  const nomeBuscaSemAcento = removeAcentos(nomeBusca.toLowerCase());
+
+  // Procurar o nome sem acento na lista
+  return listaDeGrupos.some(nome => removeAcentos(nome.toLowerCase()).includes(nomeBuscaSemAcento));
+}
+
 const mudarNomeGrupo = (event, i) => {
 
     const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
@@ -982,7 +994,7 @@ const mudarNomeGrupo = (event, i) => {
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else if(!(usuario.config.grupos.includes( eventNomeSimplens ) )){
+    } else if(!(buscaNomeGrupo(event.target.value, usuario.config.grupos)){
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
