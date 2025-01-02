@@ -974,20 +974,21 @@ function removeAcentos(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
 }
 
-function buscaNomeGrupo(nomeBusca, listaDeGrupos) {
-  // Remover acentos da string de busca
-  const nomeBuscaSemAcento = removeAcentos(nomeBusca.toLowerCase());
+const compararNomeGrupo = (str) = > {
+    const nomeSimples = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
-  // Procurar o nome sem acento na lista
-  return listaDeGrupos.some(nome => removeAcentos(nome.toLowerCase()).includes(nomeBuscaSemAcento));
-}
+    usuario.config.grupos.forEach((el, index) => {
+        if(el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim() === nomeSimples){
+            return true
+        }
+    })
+    return false
+
+}    
 
 const mudarNomeGrupo = (event, i) => {
 
-    const eventNomeSimplens = event.target.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
-    const gurpsNomeSImplens = usuario.config.grupos[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
-
-    console.log({event: eventNomeSimplens, grupo: gurpsNomeSImplens})
+    console.log(compararNomeGrupo(event.target.value))
     
     if (!event.target.value) {
         usuario.config.grupos.splice(i, 1)
