@@ -973,6 +973,7 @@ const attNomeListGrup = () => {
 
 
 const compararNomeGrupo = (str) => {
+    let compare =  false
     const nomeSimples = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
     usuario.config.grupos.forEach((el, index) => {
@@ -980,10 +981,11 @@ const compararNomeGrupo = (str) => {
 
         console.log({str: nomeSimples, grupo: nomeGrupo })
         if(nomeGrupo === nomeSimples){
-            return true
+            compare = true
+            break
         }
     })
-    return false
+    return compare
 
 }    
 
