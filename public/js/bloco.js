@@ -1076,7 +1076,7 @@ const onClickGrups = () => {
         atualizarConfig()
         attNomeListGrup()
         init("boxBloco", usuario.config.scripts)
-    } else if (usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
+    } else if ( compararNomeGrupo((input.value) ) {
         alert('grupo já cadastrado')
         input.value = ""
     } else {
