@@ -974,7 +974,7 @@ function removeAcentos(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
 }
 
-const compararNomeGrupo = (str) = > {
+const compararNomeGrupo = (str) => {
     const nomeSimples = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
     usuario.config.grupos.forEach((el, index) => {
