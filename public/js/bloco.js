@@ -979,7 +979,6 @@ const compararNomeGrupo = (str) => {
    
         if(nomeGrupo === nomeSimples){
             compare = true
-            break
         }
         console.log({str: nomeSimples, grupo: nomeGrupo, compare: compare })
     })
