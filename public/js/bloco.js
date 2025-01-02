@@ -994,7 +994,7 @@ const mudarNomeGrupo = (event, i) => {
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else if(!(buscaNomeGrupo(event.target.value, usuario.config.grupos))){
+    } else if(!( usuario.config.grupos.includes(input.value.trim().toLowerCase()) )){
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
