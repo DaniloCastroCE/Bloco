@@ -1076,7 +1076,7 @@ const onClickGrups = () => {
         attNomeListGrup()
         init("boxBloco", usuario.config.scripts)
     } else if ( compararNomeGrupo(input.value) ) {
-        alert(`grupo ${input.value.toUpperCase().trim()} já cadastrado, escolha outro nome`)
+        alert(`Já existe o grupo ${input.value.toUpperCase()}, escolha outro nome`)
         input.value = ""
     } else {
         input.value = ""
