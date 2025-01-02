@@ -1069,7 +1069,7 @@ const controleCores = () => {
 
 const onClickGrups = () => {
     const input = document.querySelector('#inpCreatGrups')
-    if (input.value.trim() !== "" && !usuario.config.grupos.includes(input.value.trim().toLowerCase())) {
+    if (input.value.trim() !== "" && !compararNomeGrupo(input.value)) {
         const valor = input.value.trim().toLowerCase()
         usuario.config.grupos.push(valor)
         input.value = ""
@@ -1081,6 +1081,7 @@ const onClickGrups = () => {
         input.value = ""
     } else {
         input.value = ""
+        init("boxBloco", usuario.config.scripts)
     }
 }
 
