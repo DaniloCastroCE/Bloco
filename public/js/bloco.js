@@ -324,10 +324,11 @@ const init = (idBox, scripts) => {
         })
 
         
-        const rascunho = document.querySelector('.boxRascunho')
-        rascunho.removeEventListener('resize', (e) => {})
-        rascunho.addEventListener('resize', (e) => {
+        const rascunho = document.querySelector('#rascunho')
+        rascunho.removeEventListener('input', (e) => {})
+        rascunho.addEventListener('input', (e) => {
             console.log(e)
+            console.log(e.style.height)
         })
         
 
