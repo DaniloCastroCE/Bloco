@@ -243,7 +243,7 @@ const getUser = async () => {
             }
 
             if (!("rascunho" in usuario.config)) {
-                Object.assign(usuario.config, { rascunho: { hidden: false, texto: "" } })
+                Object.assign(usuario.config, { rascunho: { hidden: false, texto: "" , height: "" } })
                 atualizarConfig()
                 console.log('Criado um rascunho ', usuario.config.rascunho)
             }
@@ -310,7 +310,7 @@ const init = (idBox, scripts) => {
 
         box.innerHTML += `
             <div class="boxRascunho">
-                <textarea class="rascunho" id="rascunho" placeholder="Escreva o seu rascunho aqui">${usuario.config.rascunho.texto}</textarea>
+                <textarea class="rascunho" id="rascunho" placeholder="Escreva o seu rascunho aqui" >${usuario.config.rascunho.texto}</textarea>
             </div>
         `
         if (!usuario.config.rascunho.hidden) {
@@ -321,6 +321,11 @@ const init = (idBox, scripts) => {
         document.querySelector('#rascunho').addEventListener('change', (event) => {
             usuario.config.rascunho.texto = event.target.value
             atualizarConfig()
+        })
+
+        document.querySelector('#rascunho').removeEventListener('resize', (e) => {})
+        document.querySelector('#rascunho').addEventListener('resize', (event) => {
+            console.log(event)
         })
 
         eventosDragDrog(box)
