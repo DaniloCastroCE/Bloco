@@ -323,17 +323,18 @@ const init = (idBox, scripts) => {
             atualizarConfig()
         })
 
-        const textarea = document.getElementById('rascunho');
+        const rascunho = document.getElementById('rascunho');
 
         const observer = new MutationObserver(() => {
-            const height = textarea.offsetHeight;
+            const height = rascunho.offsetHeight;
             console.log(height)
         });
 
-        observer.observe(textarea, {
+        observer.observe(rascunho, {
             attributes: true,
             attributeFilter: ['style']
         });
+        
         eventosDragDrog(box)
         checkPadrao(idBox)
 
