@@ -77,8 +77,6 @@ body {
     cursor: pointer;
 }
 
-
-
 .boxCopyScript, .boxRascunho {
     display: flex;
     align-items: center;
