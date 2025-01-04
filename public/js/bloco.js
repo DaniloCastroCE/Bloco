@@ -325,9 +325,10 @@ const init = (idBox, scripts) => {
 
         
         const rascunho = document.querySelector('#rascunho')
-        rascunho.onresize = function () {
-            console.log(rascunho.offsetHeight)
-        }
+        rascunho.removeEventListener('resize', (e) => {})
+        rascunho.addEventListener('resize', (e) => {
+            console.log(e)
+        })
         
 
         eventosDragDrog(box)
