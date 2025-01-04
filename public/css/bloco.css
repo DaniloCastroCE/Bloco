@@ -120,16 +120,14 @@ body {
 .rascunho {
     height: 100px;
     width: 490px;
+    margin-bottom: 15px;
 }
  
 .grupo{
     width: fit-content;
-    padding: 10px 15px 0;
+    padding: 5px 15px 10px;
     /*border: 1px solid var(--corLetra);*/
     border: none;
-}
-
-.rascunho, . grupo {
     margin-bottom: 15px;
 }
 
