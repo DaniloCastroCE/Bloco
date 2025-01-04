@@ -1,4 +1,4 @@
-document.querySelector('#sair').removeEventListener('click', (e) => {})
+document.querySelector('#sair').removeEventListener('click', (e) => { })
 document.querySelector('#sair').addEventListener('click', () => {
     //alert("Deslogando (Saindo)")
 
@@ -132,7 +132,7 @@ padrao[2].scripts = padrao[0].scripts.concat(padrao[1].scripts)
 
 const checkPadrao = (idBox) => {
     const box = document.querySelector(`#${idBox}`)
-    if(usuario.config.scripts.length === 0){
+    if (usuario.config.scripts.length === 0) {
         box.innerHTML = `
             <div class="boxPadrao" id="boxPadrao">
                 <label for="selectPadrao">Escolha os textos padrões </label>
@@ -153,16 +153,16 @@ const checkPadrao = (idBox) => {
 
         padrao.forEach((el, index) => {
             let nome
-            if(el.nome.length > 15){
-                nome = `${el.nome.substring(0,15)}...`
-            }else {
+            if (el.nome.length > 15) {
+                nome = `${el.nome.substring(0, 15)}...`
+            } else {
                 nome = el.nome
             }
-            if(index === 2 && el.scripts.length > 0){
+            if (index === 2 && el.scripts.length > 0) {
                 selectPadrao.innerHTML += `
                     <option value="${index}" selected>${nome.toLocaleUpperCase()}</option>
                 `
-            }else if(el.scripts.length > 0){
+            } else if (el.scripts.length > 0) {
                 selectPadrao.innerHTML += `
                     <option value="${index}">${nome.toLocaleUpperCase()}</option>
                 `
@@ -176,9 +176,9 @@ const checkPadrao = (idBox) => {
 const buttonPadrao = (event) => {
     const valor = document.querySelector(`#selectPadrao`).value
     usuario.config.scripts = padrao[valor].scripts
-    if(document.querySelector("#addGrupoPadrao").checked){
+    if (document.querySelector("#addGrupoPadrao").checked) {
         usuario.config.grupos = grupoPadrao
-    }else if(usuario.config.grupos.length === grupoPadrao.length && usuario.config.grupos.every((el, i) => el === grupoPadrao[i])){
+    } else if (usuario.config.grupos.length === grupoPadrao.length && usuario.config.grupos.every((el, i) => el === grupoPadrao[i])) {
         usuario.config.grupos = []
     }
 
@@ -193,7 +193,7 @@ const onchangeSelectPadrao = (event) => {
 
 
 const addlistPadrao = (valor) => {
-    if(!valor){
+    if (!valor) {
         valor = document.querySelector(`#selectPadrao`).value
     }
 
@@ -219,14 +219,14 @@ const addlistPadrao = (valor) => {
         console.error("ERROR:\n", err)
         document.querySelector('#boxBloco').innerHTML = ''
     }
-  
+
 }
 
 const getUser = async () => {
     fetch("/getUser")
         .then(resp => resp.json())
         .then((data) => {
-            const nomeCliente = (data.nome.length > 20) ? `${data.nome.substring(0,18)}...` : data.nome
+            const nomeCliente = (data.nome.length > 20) ? `${data.nome.substring(0, 18)}...` : data.nome
             document.title = `${data.nome.toUpperCase()}`
             document.querySelector('#meuNome').textContent = nomeCliente.toUpperCase()
             //alert(`Olá ${data.nome}, seja bem-vindo`)
@@ -243,7 +243,7 @@ const getUser = async () => {
             }
 
             if (!("rascunho" in usuario.config)) {
-                Object.assign(usuario.config, { rascunho: { hidden: false, texto: "" , height: "" } })
+                Object.assign(usuario.config, { rascunho: { hidden: false, texto: "", height: "" } })
                 atualizarConfig()
                 console.log('Criado um rascunho ', usuario.config.rascunho)
             }
@@ -252,7 +252,7 @@ const getUser = async () => {
                 Object.assign(usuario.config, { draggable: true })
             }
 
-            if(!("widthBloco" in usuario.config)) {
+            if (!("widthBloco" in usuario.config)) {
                 Object.assign(usuario.config, { widthBloco: "100" })
             }
             alterarWidthBoxBloco(usuario.config.widthBloco)
@@ -275,7 +275,7 @@ const init = (idBox, scripts) => {
     try {
         let numId = 0
         if (usuario.config.grupos !== undefined && usuario.config.grupos.length > 0) {
-            
+
             usuario.config.grupos.forEach((el, index) => {
                 let nomeSimples = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]/g, "");
                 box.innerHTML += `
@@ -288,7 +288,7 @@ const init = (idBox, scripts) => {
 
             usuario.config.scripts.forEach(el => {
                 const nomeGrupo = usuario.config.grupos.find(nome => nome === el.grupo)
-                
+
                 if (!nomeGrupo || el.grupo === '') {
                     numId = addKeyScriptMult([el], box, numId)
                 } else {
@@ -310,31 +310,52 @@ const init = (idBox, scripts) => {
 
         box.innerHTML += `
             <div class="boxRascunho">
-                <textarea class="rascunho" id="rascunho" placeholder="Escreva o seu rascunho aqui" >${usuario.config.rascunho.texto}</textarea>
+                <textarea 
+                    class="rascunho" 
+                    id="rascunho" 
+                    placeholder="Escreva o seu rascunho aqui" >${usuario.config.rascunho.texto}</textarea>
             </div>
-        `
+            `
+        const rascunho = document.getElementById('rascunho');
+
         if (!usuario.config.rascunho.hidden) {
             onclickRascunho(true)
         }
 
-        document.querySelector('#rascunho').removeEventListener('change', (e) => {})
-        document.querySelector('#rascunho').addEventListener('change', (event) => {
+        if (usuario.config.rascunho.height) {
+            rascunho.style.height = usuario.config.rascunho.height + 'px'
+        } else {
+            rascunho.style.height = '100px'
+            Object.assign(usuario.config.rascunho, { height: '100' })
+        }
+
+        rascunho.removeEventListener('change', (e) => { })
+        rascunho.addEventListener('change', (event) => {
             usuario.config.rascunho.texto = event.target.value
             atualizarConfig()
         })
 
-        const rascunho = document.getElementById('rascunho');
+
+        let debounceTimer;
+        const debounce = (callback, delay) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(callback, delay);
+        };
 
         const observer = new MutationObserver(() => {
             const height = rascunho.offsetHeight;
-            console.log(height)
+            usuario.config.rascunho.height = height
+
+            debounce(() => {
+                atualizarConfig();
+            }, 300);
         });
 
         observer.observe(rascunho, {
             attributes: true,
             attributeFilter: ['style']
         });
-        
+
         eventosDragDrog(box)
         checkPadrao(idBox)
 
@@ -345,13 +366,13 @@ const init = (idBox, scripts) => {
 }
 
 const removerEventos = (box) => {
-    try{
-        box.removeEventListener('dragstart', (e) => {})
-        box.removeEventListener('dragend', (e) => {})
-        box.removeEventListener('dragover', (e) => {})
-        box.removeEventListener('drop', (e) => {})
+    try {
+        box.removeEventListener('dragstart', (e) => { })
+        box.removeEventListener('dragend', (e) => { })
+        box.removeEventListener('dragover', (e) => { })
+        box.removeEventListener('drop', (e) => { })
 
-    }catch (err) {
+    } catch (err) {
         console.error("Errou: ", err)
     }
 }
@@ -446,7 +467,7 @@ const reordenarIdsEArray = (box) => {
 
     });
     atualizarConfig()
-    
+
 };
 
 const addKeyScriptMult = (array, divBox, numId) => {
@@ -639,7 +660,7 @@ const clickOpcoes = (numId) => {
     inputKey.value = script.key
     inputScript.value = script.script
 
-    inputKey.removeEventListener('change', (e) => {})
+    inputKey.removeEventListener('change', (e) => { })
     inputKey.addEventListener('change', (event) => {
         script.key = event.target.value
         if (event.target.value.length > 0) {
@@ -654,7 +675,7 @@ const clickOpcoes = (numId) => {
         mudarTextCopy(textarea.classList.contains("esconder"), copy, numId)
     })
 
-    inputScript.removeEventListener('change', (e) => {})
+    inputScript.removeEventListener('change', (e) => { })
     inputScript.addEventListener('change', (event) => {
         script.script = event.target.value
         if (script.key) {
@@ -665,7 +686,7 @@ const clickOpcoes = (numId) => {
         onChangeScript(numId)
     })
 
-    selectGrupo.removeEventListener('change', (e) => {})
+    selectGrupo.removeEventListener('change', (e) => { })
     selectGrupo.addEventListener('change', (event) => {
         if (event.target.value !== 'sem grupo') {
             usuario.config.scripts[numId].grupo = event.target.value
@@ -910,13 +931,13 @@ const getRange = (range) => {
 
 const changeRangePorcentagem = (input) => {
     const range = document.querySelector('#range')
-    if(input.value < 20){
+    if (input.value < 20) {
         input.value = 20
         range.value = 20
-    }else if(input.value > 100){
+    } else if (input.value > 100) {
         input.value = 100
         range.value = 100
-    }else {
+    } else {
         range.value = input.value
     }
     alterarWidthBoxBloco(input.value)
@@ -940,12 +961,12 @@ const mouseDown = (obj) => {
     document.querySelector('#tituloModal').style.background = 'none'
     document.querySelector('#boxConteudoModal').style.backgroundColor = 'rgba(255,255,255,0.1)'
     const buttonsAbasAll = document.querySelectorAll('.buttonsAbas')
-    
+
     const boxBloco = document.querySelector('#boxBloco')
     const root = document.documentElement
     const corLetra = getComputedStyle(root).getPropertyValue('--corLetra').trim();
     boxBloco.style.border = `1px solid ${corLetra}`
-    
+
     buttonsAbasAll.forEach(el => {
         el.style.background = 'none'
     })
@@ -958,11 +979,11 @@ const mouseUp = (obj) => {
     const boxBloco = document.querySelector('#boxBloco')
     boxBloco.style.border = 'none'
 
-    const buttonsAbasAll = document.querySelectorAll('.buttonsAbas')    
+    const buttonsAbasAll = document.querySelectorAll('.buttonsAbas')
     buttonsAbasAll.forEach(el => {
         el.style.background = '#f1f1f1'
     })
-    
+
 }
 
 const attNomeListGrup = () => {
@@ -983,19 +1004,19 @@ const attNomeListGrup = () => {
 }
 
 const compararNomeGrupo = (str) => {
-    let compare =  false
+    let compare = false
     const nomeSimples = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
 
     usuario.config.grupos.forEach((el, index) => {
         const nomeGrupo = el.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim()
-   
-        if(nomeGrupo === nomeSimples){
+
+        if (nomeGrupo === nomeSimples) {
             compare = true
         }
         //console.log({str: nomeSimples, grupo: nomeGrupo, compare: compare })
     })
     return compare
-}    
+}
 
 const mudarNomeGrupo = (event, i) => {
     if (!event.target.value) {
@@ -1003,7 +1024,7 @@ const mudarNomeGrupo = (event, i) => {
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
         attNomeListGrup()
-    } else if(!compararNomeGrupo(event.target.value)){
+    } else if (!compararNomeGrupo(event.target.value)) {
         usuario.config.grupos[i] = event.target.value.trim().toLowerCase()
         init("boxBloco", usuario.config.scripts)
         atualizarConfig()
@@ -1087,7 +1108,7 @@ const onClickGrups = () => {
         atualizarConfig()
         attNomeListGrup()
         init("boxBloco", usuario.config.scripts)
-    } else if ( compararNomeGrupo(input.value) ) {
+    } else if (compararNomeGrupo(input.value)) {
         alert(`Já existe o grupo ${input.value.toUpperCase()}, escolha outro nome`)
         input.value = ""
     } else {
@@ -1112,7 +1133,7 @@ const onclickRascunho = (init) => {
         iconRascunho.setAttribute('d', off)
         rascunho.style.display = "none"
         usuario.config.rascunho.hidden = false
-    } else if(usuario.config.scripts.length > 0){
+    } else if (usuario.config.scripts.length > 0) {
         iconRascunho.setAttribute('d', on)
         rascunho.style.display = "block"
         usuario.config.rascunho.hidden = true
