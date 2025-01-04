@@ -86,6 +86,10 @@ body {
     margin: 2px 0;
 }
 
+.boxRascunho {
+    margin: 2px 0 15px;
+}
+
 .boxCopyScript .copy {
     font-weight: 700;
     height: 30px;
