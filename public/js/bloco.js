@@ -323,7 +323,7 @@ const init = (idBox, scripts) => {
         }
 
         if (usuario.config.rascunho.height) {
-            rascunho.style.height = usuario.config.rascunho.height + 'px'
+            rascunho.style.height = `${usuario.config.rascunho.height}px`
         } else {
             rascunho.style.height = '100px'
             Object.assign(usuario.config.rascunho, { height: '100' })
@@ -335,7 +335,7 @@ const init = (idBox, scripts) => {
             atualizarConfig()
         })
 
-
+        
         let debounceTimer;
         const debounce = (callback, delay) => {
             clearTimeout(debounceTimer);
@@ -348,7 +348,7 @@ const init = (idBox, scripts) => {
 
             debounce(() => {
                 atualizarConfig();
-            }, 300);
+            }, 1000);
         });
 
         observer.observe(rascunho, {
