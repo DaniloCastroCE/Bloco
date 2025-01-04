@@ -84,10 +84,6 @@ body {
     margin: 2px 0;
 }
 
-.boxRascunho {
-    margin: 2px 0 15px;
-}
-
 .boxCopyScript .copy {
     font-weight: 700;
     height: 30px;
@@ -128,9 +124,13 @@ body {
  
 .grupo{
     width: fit-content;
-    padding: 10px 15px 20px;
+    padding: 10px 15px 0;
     /*border: 1px solid var(--corLetra);*/
     border: none;
+}
+
+.rascunho, . grupo {
+    margin-bottom: 15px;
 }
 
 .grupo legend {
