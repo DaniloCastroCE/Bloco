@@ -324,7 +324,7 @@ const init = (idBox, scripts) => {
         })
 
         
-        const rascunho = document.querySelector('#rascunho')
+        const rascunho = document.querySelector('.boxRascunho')
         rascunho.removeEventListener('resize', (e) => {})
         rascunho.addEventListener('resize', (e) => {
             console.log(e)
