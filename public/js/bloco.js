@@ -323,14 +323,11 @@ const init = (idBox, scripts) => {
             atualizarConfig()
         })
 
-        
-        const rascunho = document.querySelector('#rascunho')
-        rascunho.removeEventListener('input', (e) => {})
-        rascunho.addEventListener('input', (e) => {
-            console.log(e)
-            console.log(e.style.height)
-        })
-        
+        window.removeEventListener('resize', (e) => {})
+        window.addEventListener('resize', () => {
+            const rascunho = document.querySelector('#rascunho')
+            console.log(rascunho.offsetHeight)
+        });
 
         eventosDragDrog(box)
         checkPadrao(idBox)
