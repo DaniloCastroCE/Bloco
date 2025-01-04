@@ -125,7 +125,7 @@ body {
  
 .grupo{
     width: fit-content;
-    padding: 5px 15px 10px;
+    padding: 5px 15px 0;
     /*border: 1px solid var(--corLetra);*/
     border: none;
     margin-bottom: 15px;
