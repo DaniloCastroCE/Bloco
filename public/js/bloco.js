@@ -323,12 +323,17 @@ const init = (idBox, scripts) => {
             atualizarConfig()
         })
 
-        window.removeEventListener('resize', (e) => {})
-        window.addEventListener('resize', () => {
-            const rascunho = document.querySelector('#rascunho')
-            console.log(rascunho.offsetHeight)
+        const textarea = document.getElementById('rascunho');
+
+        const observer = new MutationObserver(() => {
+            const height = textarea.offsetHeight;
+            console.log(height)
         });
 
+        observer.observe(textarea, {
+            attributes: true,
+            attributeFilter: ['style']
+        });
         eventosDragDrog(box)
         checkPadrao(idBox)
 
